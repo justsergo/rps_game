@@ -1,13 +1,13 @@
-import { ThemeProvider } from "styled-components";
+import { Typography } from "@material-ui/core";
+import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 
-import Text from "./components/Text";
-import { baseTheme } from "./styles/theme";
+import theme from "./theme";
 
 function App() {
   return (
-    <ThemeProvider theme={baseTheme}>
-      <Text variant="semi_18px">Build Rock, Paper and Scissors Game with React JS</Text>
-    </ThemeProvider>
+    <MuiThemeProvider theme={theme}>
+      <Typography variant="h1" color="textPrimary">Build Rock, Paper and Scissors Game with React JS</Typography>
+    </MuiThemeProvider>
   );
 }
 

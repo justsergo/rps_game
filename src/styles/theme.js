@@ -11,16 +11,18 @@ export const baseTheme = {
     small: "0.875rem",
   },
 
+  // hsl gradients use with background (not background-color)
   colors: {
-    scissorsGradient: "hsl(39, 89%, 49%)",
-    background: "hsl(214, 47%, 23%)",
+    background: "radial-gradient(circle, hsl(214, 47%, 23%), hsl(237, 49%, 15%))",
     darkText: "hsl(229, 25%, 31%)",
     scoreText: "hsl(229, 64%, 46%)",
     headerOutline: "hsl(217, 16%, 45%)",
-    paperGradient: "hsl(230, 89%, 62%)",
-    rockGradient: "hsl(349, 71%, 52%)",
+    paperGradient: "radial-gradient(hsl(230, 89%, 62%), hsl(230, 89%, 65%))",
+    rockGradient: "radial-gradient(hsl(349, 71%, 52%), hsl(349, 70%, 56%))",
+    scissorsGradient: "radial-gradient(hsl(39, 89%, 49%), hsl(40, 84%, 53%))",
     lizardGradient: "hsl(261, 73%, 60%)",
     cyan: "hsl(189, 59%, 53%)",
+    white: "#fff",
   },
 
   bold_24px: {
@@ -28,7 +30,7 @@ export const baseTheme = {
     fontWeight: "bold",
     fontStyle: "normal",
     fontSize: "24px",
-    color: "hsl(229, 25%, 31%)",
+    color: "#fff",
     letterSpacing: "1px",
   },
   bold_18px: {
@@ -36,7 +38,7 @@ export const baseTheme = {
     fontWeight: "bold",
     fontStyle: "normal",
     fontSize: "18px",
-    color: "hsl(229, 25%, 31%)",
+    color: "#fff",
     letterSpacing: "1px",
   },
   bold_14px: {
@@ -44,7 +46,7 @@ export const baseTheme = {
     fontWeight: "bold",
     fontStyle: "normal",
     fontSize: "14px",
-    color: "hsl(229, 25%, 31%)",
+    color: "#fff",
     letterSpacing: "1px",
   },
   semi_18px: {
@@ -52,7 +54,7 @@ export const baseTheme = {
     fontWeight: 600,
     fontStyle: "normal",
     fontSize: "18px",
-    color: "hsl(229, 25%, 31%)",
+    color: "#fff",
     letterSpacing: "1px",
   },
   semi_16px: {
@@ -60,7 +62,7 @@ export const baseTheme = {
     fontWeight: 600,
     fontStyle: "normal",
     fontSize: "16px",
-    color: "hsl(229, 25%, 31%)",
+    color: "#fff",
     letterSpacing: "1px",
   },
   semi_14px: {
@@ -68,7 +70,7 @@ export const baseTheme = {
     fontWeight: 600,
     fontStyle: "normal",
     fontSize: "14px",
-    color: "hsl(229, 25%, 31%)",
+    color: "#fff",
     letterSpacing: "1px",
   },
 };

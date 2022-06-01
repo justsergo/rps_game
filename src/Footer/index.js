@@ -1,6 +1,7 @@
-import { withStyles } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
-import Footer from "./Footer";
-import styles from "./styles";
+const Footer = () => {
+  return <Typography variant="h2" color="textPrimary">Footer</Typography>;
+};
 
-export default withStyles(styles)(Footer);
+export default Footer;

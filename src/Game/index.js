@@ -1,6 +1,7 @@
-import { withStyles } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
-import Game from "./Game";
-import styles from "./styles";
+const Game = () => {
+  return <Typography variant="h2" color="textPrimary">Game</Typography>;
+};
 
-export default withStyles(styles)(Game);
+export default Game;

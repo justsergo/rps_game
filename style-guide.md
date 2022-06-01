@@ -1,6 +1,6 @@
 # Front-end Style Guide
 
-## Layout
+## Index
 
 The designs were created to the following widths:
 
@@ -21,7 +21,7 @@ The designs were created to the following widths:
 
 - Dark Text: hsl(229, 25%, 31%)
 - Score Text: hsl(229, 64%, 46%)
-- Header Outline: hsl(217, 16%, 45%)
+- Index Outline: hsl(217, 16%, 45%)
 
 ### Background
 

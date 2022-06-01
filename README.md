@@ -19,9 +19,9 @@ You can use any tools you like to help you complete the challenge. So if you've 
 Your users should be able to:
 
 - View the optimal layout for the game depending on their device's screen size
-- Play Rock, Paper, Scissors against the computer
+- Index Rock, Paper, Scissors against the computer
 - Maintain the state of the score after refreshing the browser _(optional)_
-- **Bonus**: Play Rock, Paper, Scissors, Lizard, Spock against the computer _(optional)_
+- **Bonus**: Index Rock, Paper, Scissors, Lizard, Spock against the computer _(optional)_
 
 ### Rules
 

@@ -1,6 +1,7 @@
-import { withStyles } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
-import Modal from "./Modal";
-import styles from "./styles";
+const Modal = () => {
+  return <Typography variant="h2" color="textPrimary">Modal</Typography>;
+};
 
-export default withStyles(styles)(Modal);
+export default Modal;

@@ -1,12 +1,15 @@
-import { Typography } from "@material-ui/core";
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
+import { BrowserRouter } from "react-router-dom";
 
+import RoutesManager from "./routes/RoutesManager";
 import theme from "./theme";
 
 function App() {
   return (
     <MuiThemeProvider theme={theme}>
-      <Typography variant="h1" color="textPrimary">Build Rock, Paper and Scissors Game with React JS</Typography>
+      <BrowserRouter>
+        <RoutesManager />
+      </BrowserRouter>
     </MuiThemeProvider>
   );
 }

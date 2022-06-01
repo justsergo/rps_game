@@ -1,6 +1,6 @@
 const palette = {
   common: {
-    white: "#afafa",
+    white: "#fafafa",
   },
 
   error: {

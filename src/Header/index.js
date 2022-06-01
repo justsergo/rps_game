@@ -1,6 +1,7 @@
-import { withStyles } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
-import Header from "./Header";
-import styles from "./styles";
+const Header = () => {
+  return <Typography variant="h2" color="textPrimary">Header</Typography>;
+};
 
-export default withStyles(styles)(Header);
+export default Header;

@@ -5,7 +5,8 @@ import palette from "./palette";
 import typography from "./typography";
 
 const defaultTheme = {
-  spacing: 8,
+  // spacing 1 === 8px
+  spacing: 1,
 
   breakpoints: {
     values: {

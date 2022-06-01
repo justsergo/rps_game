@@ -1,6 +1,7 @@
-import { withStyles } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
-import Play from "./Play";
-import styles from "./styles";
+const Play = () => {
+  return <Typography variant="h2" color="textPrimary">Play</Typography>;
+};
 
-export default withStyles(styles)(Play);
+export default Play;

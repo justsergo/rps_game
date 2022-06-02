@@ -28,6 +28,7 @@ const palette = {
   action: {
     cyan: "hsl(189, 59%, 53%)",
   },
+
 };
 
 export default palette;

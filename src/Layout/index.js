@@ -1,4 +1,4 @@
-import { Container, Grid } from "@material-ui/core";
+import { Box, Container } from "@material-ui/core";
 import { Outlet } from "react-router-dom";
 
 import Footer from "../Footer";
@@ -9,25 +9,17 @@ const Layout = () => {
   const classes = useStyles();
   return (
     <Container fixed className={classes.appContainer}>
-      <Grid
-        container
-        spacing={1}
-        direction="column"
-        justifyContent="space-between"
-        alignItems="center"
-        className={classes.gridContainer}
-      >
+      <Box component="div" className={classes.headerContainer}>
+        <Header />
+      </Box>
 
-        <Grid item>
-          <Header />
-        </Grid>
-        <Grid item>
-          <Outlet />
-        </Grid>
-        <Grid item>
-          <Footer />
-        </Grid>
-      </Grid>
+      <Box component="div">
+        <Outlet />
+      </Box>
+
+      <Box component="div">
+        <Footer />
+      </Box>
     </Container>
   );
 };

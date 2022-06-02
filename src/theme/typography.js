@@ -2,39 +2,43 @@ const typography = {
   htmlFontSize: 10,
   fontFamily: "Barlow Semi Condensed",
 
+  caption: {
+    fontStyle: "normal",
+    fontWeight: "bold",
+    fontSize: "3.5rem",
+    lineHeight: "75%",
+  },
+
   h1: {
     fontStyle: "normal",
     fontWeight: "bold",
     fontSize: "2.5rem",
-    letterSpacing: "1px",
+    lineHeight: "2rem",
   },
 
   h2: {
     fontStyle: "normal",
     fontWeight: "bold",
     fontSize: "2rem",
-    letterSpacing: "1px",
+    lineHeight: "2rem",
   },
 
   body1: {
     fontStyle: "normal",
-    fontWeight: "bold",
+    fontWeight: "600",
     fontSize: "1.3rem",
-    letterSpacing: "1px",
   },
 
   body2: {
     fontStyle: "normal",
     fontWeight: 600,
     fontSize: "1rem",
-    letterSpacing: "1px",
   },
 
   button: {
     fontStyle: "normal",
     fontWeight: 600,
     fontSize: "1rem",
-    letterSpacing: "1px",
   },
 };
 

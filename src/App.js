@@ -1,4 +1,4 @@
-import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
 
 import RoutesManager from "./routes/RoutesManager";
@@ -6,11 +6,11 @@ import theme from "./theme";
 
 function App() {
   return (
-    <MuiThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <BrowserRouter>
         <RoutesManager />
       </BrowserRouter>
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 }
 

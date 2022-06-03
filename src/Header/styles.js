@@ -1,55 +1,54 @@
-import { makeStyles } from "@material-ui/core";
+import { Grid, Typography } from "@mui/material";
+import styled from "styled-components";
 
-const useStyles = makeStyles((theme) => ({
-  headerContainer: {
-    height: "90%",
-    margin: "10px auto auto auto",
-    border: `3px solid ${theme.palette.background.headerOutline}`,
-    borderRadius: theme.spacing(15),
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  textContainer: {
-    width: "40%",
-    textTransform: "uppercase",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-    marginLeft: "1rem",
-  },
+export const StyledGrid = styled(Grid)`
+  height: 90%;
+  margin: 10px auto auto auto;
+  border: 3px solid ${({ theme }) => theme.palette.background.headerOutline};
+  border-radius: ${({ theme }) => theme.spacing(15)};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
-  text: {
-    [theme.breakpoints.down("sm")]: {
-      fontSize: "1.9rem",
-      lineHeight: "1.5rem",
-    },
-  },
+export const TextGridContainer = styled(Grid)`
+  width: 40%;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 1rem;
+`;
 
-  scoreContainer: {
-    width: "20%",
-    height: "85%",
-    background: theme.palette.common.white,
-    borderRadius: theme.spacing(12),
-    marginRight: "1rem",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    [theme.breakpoints.down("md")]: {
-      height: "70%",
-    },
-  },
+export const Text = styled(Typography)`
+  ${({ theme }) => theme.breakpoints.down("sm")} {
+    font-size: 1.9rem;
+    line-height: 1.5rem;
+  }
+`;
 
-  scoreText: {
-    color: theme.palette.text.score,
-  },
+export const ScoreGridContainer = styled(Grid)`
+  width: 20%;
+  height: 85%;
+  background: ${({ theme }) => theme.palette.common.white};
+  border-radius: ${({ theme }) => theme.spacing(12)};
+  margin-right: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-  scoreValue: {
-    [theme.breakpoints.down("md")]: {
-      fontSize: "2.5rem",
-    },
-  },
-}));
+  ${({ theme }) => theme.breakpoints.down("md")} {
+    height: 70%;
+  }
+`;
 
-export default useStyles;
+export const ScoreText = styled(Typography)`
+  color: ${({ theme }) => theme.palette.text.score};
+`;
+
+export const ScoreValue = styled(Typography)`
+  ${({ theme }) => theme.breakpoints.down("md")} {
+    font-size: 2.5rem;
+  }
+`;

@@ -28,6 +28,13 @@ const palette = {
   action: {
     cyan: "hsl(189, 59%, 53%)",
   },
+
+  button: {
+    background: "#f3f3f3",
+    textRed: "#cf0808",
+    textBlue: "#1b2b4c",
+  },
+
 };
 
 export default palette;

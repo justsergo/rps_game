@@ -1,5 +1,6 @@
 import { createTheme } from "@mui/material";
 
+import createComponents from "./components";
 import { createOverrides } from "./overrides";
 import palette from "./palette";
 import typography from "./typography";
@@ -25,6 +26,7 @@ const defaultTheme = {
 const theme = createTheme({
   ...defaultTheme,
   overrides: createOverrides(defaultTheme),
+  components: createComponents(palette),
 });
 
 export default theme;

@@ -1,27 +1,25 @@
-import { Box, Container } from "@material-ui/core";
+import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
 import Footer from "../Footer";
 import Header from "../Header";
-import useStyles from "./styles";
+import { StyledBox, StyledContainer } from "./styles";
 
-const Layout = () => {
-  const classes = useStyles();
-  return (
-    <Container fixed className={classes.appContainer}>
-      <Box component="div" className={classes.headerContainer}>
-        <Header />
-      </Box>
+const Layout = () => (
+  <StyledContainer fixed>
 
-      <Box component="div">
-        <Outlet />
-      </Box>
+    <StyledBox component="div">
+      <Header />
+    </StyledBox>
 
-      <Box component="div">
-        <Footer />
-      </Box>
-    </Container>
-  );
-};
+    <Box component="div">
+      <Outlet />
+    </Box>
+
+    <Box component="div">
+      <Footer />
+    </Box>
+  </StyledContainer>
+);
 
 export default Layout;

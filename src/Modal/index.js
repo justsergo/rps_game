@@ -1,4 +1,4 @@
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 
 const Modal = () => {
   return <Typography variant="h2" color="textPrimary">Modal</Typography>;

@@ -1,4 +1,4 @@
-import { Box, Container } from "@material-ui/core";
+import { Box, Button, Container } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
 import Footer from "../Footer";
@@ -12,6 +12,12 @@ const Layout = () => {
       <Box component="div" className={classes.headerContainer}>
         <Header />
       </Box>
+      <Button variant="gameText">Game</Button>
+      <div>
+        <Button variant="iconWrap">Game</Button>
+        <Button variant="iconWrap">Game</Button>
+        <Button variant="iconWrap">Game</Button>
+      </div>
 
       <Box component="div">
         <Outlet />

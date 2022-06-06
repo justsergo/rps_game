@@ -1,4 +1,4 @@
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 
 const Game = () => {
   return <Typography variant="h2" color="textPrimary">Game</Typography>;

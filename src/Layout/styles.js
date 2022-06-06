@@ -1,19 +1,14 @@
-import { makeStyles } from "@mui/styles";
+import { Box, Container } from "@mui/material";
+import styled from "styled-components";
 
-const useStyles = makeStyles(() => ({
-  appContainer: {
-    height: "100vh",
-    width: "100vw",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-  },
-  gridContainer: {
-    height: "100%",
-  },
-  headerContainer: {
-    height: "18%",
-  },
-}));
+export const StyledContainer = styled(Container)`
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
 
-export default useStyles;
+export const StyledBox = styled(Box)`
+  height: 18%;
+`;

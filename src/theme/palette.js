@@ -1,6 +1,6 @@
 const palette = {
   common: {
-    white: "#fafafa",
+    main: "#fafafa",
   },
 
   error: {
@@ -27,6 +27,7 @@ const palette = {
 
   action: {
     cyan: "hsl(189, 59%, 53%)",
+    animation: "linear-gradient(transparent, #0004)",
   },
 
   button: {

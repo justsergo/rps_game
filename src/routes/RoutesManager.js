@@ -1,16 +1,18 @@
 import { Route, Routes } from "react-router-dom";
 
-import Game from "../Game";
-import Layout from "../Layout";
-import Play from "../Play";
+import Layout from "../components/Layout";
+import Battle from "../pages/Battle";
+import Menu from "../pages/Menu";
+import StartPage from "../pages/StartPage";
 
 const RoutesManager = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Play />} />
-          <Route path="game" element={<Game />} />
+        <Route path="/" element={<StartPage />} />
+        <Route path="game" element={<Layout />}>
+          <Route index element={<Menu />} />
+          <Route path="battle" element={<Battle />} />
         </Route>
       </Routes>
     </>

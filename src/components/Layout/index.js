@@ -12,11 +12,11 @@ const Layout = () => {
         <Header />
       </StyledBox>
 
-      <Box component="div">
+      <Box component="div" sx={{ height: "70%" }}>
         <Outlet />
       </Box>
 
-      <Box component="div">
+      <Box component="div" sx={{ height: "12%" }}>
         <Footer />
       </Box>
     </StyledContainer>

@@ -23,18 +23,53 @@ const createComponents = (palette) => ({
       {
         props: { variant: "iconWrap" },
         style: {
-          width: "5rem",
-          height: "5rem",
+          width: "8rem",
+          height: "8rem",
           borderRadius: "50%",
-          overflow: "hidden",
-          border: "1rem solid #f5b904",
           backgroundColor: palette.button.background,
-          display: "flex",
+          display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
+          boxShadow: "0 0.7rem 0 -0.3rem #c7b7ba inset",
+          boxSizing: "border-box",
           padding: 0,
+          position: "relative",
           "&:hover": {
             backgroundColor: palette.button.background,
+          },
+          "&::before": {
+            content: "\"\"",
+            borderRadius: "50%",
+            position: "absolute",
+            boxShadow: "0 -0.15rem 0 0.1rem rgba(0, 0, 0, 0.4) inset",
+            display: "block",
+            width: "10rem",
+            height: "10rem",
+            zIndex: -1,
+          },
+        },
+      },
+      {
+        props: { figure: "rock" },
+        style: {
+          "&::before": {
+            backgroundColor: "#ff0d56",
+          },
+        },
+      },
+      {
+        props: { figure: "paper" },
+        style: {
+          "&::before": {
+            backgroundColor: "#3e75ff",
+          },
+        },
+      },
+      {
+        props: { figure: "scissors" },
+        style: {
+          "&::before": {
+            backgroundColor: "#f5b904",
           },
         },
       },

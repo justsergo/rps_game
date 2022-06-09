@@ -28,7 +28,7 @@ const typography = {
 
   body1: {
     fontStyle: "normal",
-    fontWeight: "600",
+    fontWeight: 600,
     fontSize: "1.3rem",
     userSelect: "none",
   },

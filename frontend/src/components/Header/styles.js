@@ -39,16 +39,20 @@ export const ScoreGridContainer = styled(Grid)`
   align-items: center;
 
   ${({ theme }) => theme.breakpoints.down("md")} {
-    height: 70%;
+    height: 80%;
   }
 `;
 
 export const ScoreText = styled(Typography)`
   color: ${({ theme }) => theme.palette.text.score};
+
+  ${({ theme }) => theme.breakpoints.down("sm")} {
+    margin-bottom: 3px;
+  }
 `;
 
 export const ScoreValue = styled(Typography)`
   ${({ theme }) => theme.breakpoints.down("md")} {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 `;

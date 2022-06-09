@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { io } from "socket.io-client";
 
 import RoutesManager from "./routes/RoutesManager";
+import GameContextProvider from "./services/gameContext";
 import theme from "./theme";
 
 const ENDPOINT = "/";
@@ -35,9 +36,11 @@ function App() {
     <>
       {rooms && [renderRooms] }
       <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <RoutesManager />
-        </BrowserRouter>
+        <GameContextProvider>
+          <BrowserRouter>
+            <RoutesManager />
+          </BrowserRouter>
+        </GameContextProvider>
       </ThemeProvider>
     </>
   );

@@ -1,0 +1,148 @@
+{
+    "extends": [
+      "react-app",
+      "airbnb",
+      "plugin:jsx-a11y/recommended",
+      "react-app/jest"
+    ],
+    "plugins": [
+      "jsx-a11y",
+      "react-hooks",
+      "jest",
+      "simple-import-sort",
+      "import"
+    ],
+    "rules": {
+      "quotes": [
+        "error",
+        "double"
+      ],
+      "jsx-quotes": [
+        "error",
+        "prefer-double"
+      ],
+      "default-param-last": "off",
+      "react/jsx-no-useless-fragment": "off",
+      "react/jsx-no-undef": "off",
+      "react/jsx-fragments": "off",
+      "camelcase": "off",
+      "dot-notation": [
+        "error",
+        {
+          "allowKeywords": true
+        }
+      ],
+      "react/function-component-definition": [
+        "off",
+        {
+          "namedComponents": "arrow-function"
+        }
+      ],
+      "arrow-body-style": [
+        "off",
+        "never"
+      ],
+      "consistent-return": [
+        "error",
+        {
+          "treatUndefinedAsUnspecified": false
+        }
+      ],
+      "no-use-before-define": [
+        "error",
+        {
+          "functions": false,
+          "classes": false,
+          "variables": false
+        }
+      ],
+      "react/prop-types": 0,
+      "simple-import-sort/imports": "error",
+      "simple-import-sort/exports": "error",
+      "react/react-in-jsx-scope": 0,
+      "react/no-unstable-nested-components": [
+        "off",
+        {
+          "allowAsProps": false
+        }
+      ],
+      "react/jsx-filename-extension": [
+        1,
+        {
+          "extensions": [
+            ".js",
+            ".jsx"
+          ]
+        }
+      ],
+      "react-hooks/rules-of-hooks": 2,
+      "react-hooks/exhaustive-deps": 1,
+      "import/prefer-default-export": 0,
+      "react/jsx-one-expression-per-line": 0,
+      "react/jsx-props-no-spreading": 0,
+      "max-len": [
+        2,
+        120,
+        2,
+        {
+          "ignoreUrls": true,
+          "ignoreStrings": true
+        }
+      ],
+      "linebreak-style": 0,
+      "no-continue": 0,
+      "jsx-a11y/anchor-is-valid": 0
+    },
+    "overrides": [
+      {
+        "files": [
+          "*.test.js"
+        ],
+        "rules": {
+          "react/prop-types": 0,
+          "react/react-in-jsx-scope": 0
+        }
+      }
+    ],
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "extensions": [
+            ".js"
+          ],
+          "paths": [
+            "src"
+          ]
+        }
+      },
+      "import/extensions": [
+        ".js",
+        ".jsx"
+      ],
+      "import/order": [
+        "error",
+        {
+          "groups": [
+            "builtin",
+            "external",
+            "internal"
+          ],
+          "pathGroups": [
+            {
+              "pattern": "react",
+              "group": "external",
+              "position": "before"
+            }
+          ],
+          "pathGroupsExcludedImportTypes": [
+            "react"
+          ],
+          "newlines-between": "always",
+          "alphabetize": {
+            "order": "asc",
+            "caseInsensitive": true
+          }
+        }
+      ]
+    }
+  }

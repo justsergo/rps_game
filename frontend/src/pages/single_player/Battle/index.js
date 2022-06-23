@@ -1,10 +1,11 @@
 import { Box, Grid } from "@mui/material";
-import ChoiceButton from "frontend/src/components/ChoiceButton";
-import GameItemContainer from "frontend/src/components/GameItemContainer";
-import ResultMessage from "frontend/src/components/ResultMessage";
-import { GameResultGrid, StyledTypography } from "frontend/src/pages/single_player/Battle/styles";
-import { GameContext } from "frontend/src/services/gameContext";
 import { useContext, useEffect, useState } from "react";
+
+import ChoiceButton from "../../../components/ChoiceButton";
+import GameItemContainer from "../../../components/GameItemContainer";
+import ResultMessage from "../../../components/ResultMessage";
+import { GameContext } from "../../../services/gameContext";
+import { GameResultGrid, StyledTypography } from "./styles";
 
 const Battle = () => {
   const {

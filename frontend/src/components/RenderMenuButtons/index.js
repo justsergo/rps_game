@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
-import MenuButton from "frontend/src/components/MenuButton";
-import { GAME_ITEMS } from "frontend/src/constants/names";
+
+import { GAME_ITEMS } from "../../constants/names";
+import MenuButton from "../MenuButton";
 
 export const buttonsNames = Object.values(GAME_ITEMS);
 

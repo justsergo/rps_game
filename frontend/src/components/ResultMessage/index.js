@@ -1,9 +1,10 @@
 import {
   Box, Button, Grow, Typography,
 } from "@mui/material";
-import { GameContext } from "frontend/src/services/gameContext";
 import { useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { GameContext } from "../../services/gameContext";
 
 const ResultMessage = () => {
   const navigate = useNavigate();

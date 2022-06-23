@@ -1,8 +1,8 @@
-import { choiceIcons } from "frontend/src/constants/choiceIcons";
-import { GameContext } from "frontend/src/services/gameContext";
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 
+import { choiceIcons } from "../../constants/choiceIcons";
+import { GameContext } from "../../services/gameContext";
 import IconButton from "../Button";
 
 const MenuButton = ({ id }) => {

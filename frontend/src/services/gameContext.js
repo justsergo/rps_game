@@ -1,8 +1,9 @@
-import { getWinPoints } from "frontend/src/common/utils/getWinPoints";
-import { GAME_ITEMS } from "frontend/src/constants/names";
 import {
   createContext, useCallback, useMemo, useState,
 } from "react";
+
+import { getWinPoints } from "../common/utils/getWinPoints";
+import { GAME_ITEMS } from "../constants/names";
 
 export const GameContext = createContext(null);
 

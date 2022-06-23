@@ -1,5 +1,6 @@
-import { GameContext } from "frontend/src/services/gameContext";
 import { useContext, useEffect, useState } from "react";
+
+import { GameContext } from "../../services/gameContext";
 
 const ScoreHelper = () => {
   const { resultPoint } = useContext(GameContext);

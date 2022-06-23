@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
-import RenderButton, { buttonsNames } from "frontend/src/components/RenderMenuButtons";
-import { StyledGrid } from "frontend/src/pages/single_player/Menu/styles";
 
 import { TriangleImage } from "../../../assets/images";
+import RenderButton, { buttonsNames } from "../../../components/RenderMenuButtons";
+import { StyledGrid } from "./styles";
 
 const Menu = () => {
   return (

@@ -1,6 +1,5 @@
-import { GAME_ITEMS } from "frontend/src/constants/names";
-
 import { PaperImage, RockImage, ScissorsImage } from "../assets/images";
+import { GAME_ITEMS } from "./names";
 
 export const choiceIcons = {
   [GAME_ITEMS.PAPER]: <PaperImage />,

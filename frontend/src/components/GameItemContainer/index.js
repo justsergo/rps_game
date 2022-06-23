@@ -1,5 +1,6 @@
 import { Typography } from "@mui/material";
-import { StyledContainer } from "frontend/src/components/GameItemContainer/styles";
+
+import { StyledContainer } from "./styles";
 
 const GameItemContainer = ({ timer }) => {
   return (

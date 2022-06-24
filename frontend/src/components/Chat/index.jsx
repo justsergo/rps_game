@@ -10,7 +10,7 @@ const Chat = () => {
 
   useEffect(
     () => {
-      socketRef.current = io.connect("http://localhost:5000");
+      socketRef.current = io("/");
       socketRef.current.on("message", ({ name, message }) => {
         setChat([...chat, { name, message }]);
       });

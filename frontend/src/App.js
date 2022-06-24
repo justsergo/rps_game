@@ -3,16 +3,16 @@ import { useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { io } from "socket.io-client";
 
+import Chat from "./components/Chat";
+import Chat2 from "./components/Chat/last";
 import RoutesManager from "./routes/RoutesManager";
 import theme from "./theme";
-
-const ENDPOINT = "/";
 
 function App() {
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    const socket = io(ENDPOINT);
+    const socket = io("/");
     socket.on("connect", () => {
       socket.on("available-rooms", (aRooms) => {
         delete aRooms[socket.id];
@@ -39,6 +39,8 @@ function App() {
           <RoutesManager />
         </BrowserRouter>
       </ThemeProvider>
+      <Chat />
+      <Chat2 />
     </>
   );
 }

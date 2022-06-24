@@ -1,8 +1,8 @@
 import { StyledContainer } from "./styles";
 
-const GlassContainer = ({ children }) => {
+const GlassContainer = ({ children, sx }) => {
   return (
-    <StyledContainer container>
+    <StyledContainer container sx={sx}>
       {children}
     </StyledContainer>
   );

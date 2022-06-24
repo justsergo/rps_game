@@ -1,10 +1,29 @@
-import { TextField } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import SendIcon from "@mui/icons-material/Send";
+import {
+  Button, Grid, IconButton, Slide, Typography,
+} from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 
-const Chat = () => {
+import {
+  AreaMessage, ChatMessages, FormChat, InsertZone,
+} from "./style";
+
+const RenderChatMessages = ({ chat, nickName }) => {
+  return chat.map(({ message }, index) => (
+    <Grid container key={Math.random(index)} sx={{ height: "40px" }}>
+      <Typography variant="chat">{nickName}:</Typography>
+      <Typography variant="chat">{message}</Typography>
+    </Grid>
+  ));
+};
+
+const Chat = ({ isOpen, onClose }) => {
   const [state, setState] = useState({ message: "", name: "" });
   const [chat, setChat] = useState([]);
+
+  const nickName = "TEST"; // TODO: take nickname from auth nickname
 
   const socketRef = useRef();
 
@@ -24,46 +43,36 @@ const Chat = () => {
   };
 
   const onMessageSubmit = (e) => {
-    const { name, message } = state;
-    socketRef.current.emit("message", { name, message });
+    const { message } = state;
+    socketRef.current.emit("message", { nickName, message });
     e.preventDefault();
-    setState({ message: "", name });
-  };
-
-  const renderChat = () => {
-    return chat.map(({ name, message }, index) => (
-      <div key={Math.random(index)}>
-        <h3>
-          {name}: <span>{message}</span>
-        </h3>
-      </div>
-    ));
+    setState({ message: "", nickName });
   };
 
   return (
-    <div className="card">
-      <form onSubmit={onMessageSubmit}>
-        <h1>Messenger</h1>
-        <div className="name-field">
-          <TextField name="name" onChange={(e) => onTextChange(e)} value={state.name} label="Name" />
-        </div>
-        <div>
-          <TextField
-            name="message"
-            onChange={(e) => onTextChange(e)}
-            value={state.message}
-            id="outlined-multiline-static"
-            variant="outlined"
-            label="Message"
-          />
-        </div>
-        <button type="submit">Send Message</button>
-      </form>
-      <div className="render-chat">
-        <h1>Chat Log</h1>
-        {renderChat()}
-      </div>
-    </div>
+    <Slide in={isOpen} direction="up" timeout={500}>
+      <FormChat onSubmit={onMessageSubmit}>
+
+        <Button
+          onClick={onClose}
+          sx={{
+            zIndex: "2", position: "absolute", right: "0", top: "0",
+          }}
+        >
+          <CloseIcon color="info" fontSize="medium" />
+        </Button>
+
+        <ChatMessages container>
+          <RenderChatMessages chat={chat} nickName={nickName} />
+        </ChatMessages>
+
+        <InsertZone container>
+          <AreaMessage name="message" placeholder="Message" value={state.message} minRows={2} maxRows={2} onChange={(e) => onTextChange(e)} />
+          <IconButton type="submit" color="success"><SendIcon color="info" fontSize="medium" /></IconButton>
+        </InsertZone>
+
+      </FormChat>
+    </Slide>
   );
 };
 

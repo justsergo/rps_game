@@ -25,7 +25,12 @@ const typography = {
     lineHeight: "2rem",
     userSelect: "none",
   },
-
+  chat: {
+    fontStyle: "normal",
+    fontSize: "1.5rem",
+    lineHeight: "1rem",
+    color: "white",
+  },
   body1: {
     fontStyle: "normal",
     fontWeight: 600,

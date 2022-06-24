@@ -6,6 +6,7 @@ import { io } from "socket.io-client";
 import Chat from "./components/Chat";
 import Chat2 from "./components/Chat/last";
 import RoutesManager from "./routes/RoutesManager";
+import GameContextProvider from "./services/gameContext";
 import theme from "./theme";
 
 function App() {
@@ -35,9 +36,11 @@ function App() {
     <>
       {rooms && [renderRooms] }
       <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <RoutesManager />
-        </BrowserRouter>
+        <GameContextProvider>
+          <BrowserRouter>
+            <RoutesManager />
+          </BrowserRouter>
+        </GameContextProvider>
       </ThemeProvider>
       <Chat />
       <Chat2 />

@@ -1,3 +1,4 @@
+import ScoreHelper from "../../common/utils/scoreHelper";
 import {
   ScoreGridContainer, ScoreText, ScoreValue, StyledGrid, Text, TextGridContainer,
 } from "./styles";
@@ -11,9 +12,11 @@ const Header = () => {
         <Text variant="h1" color="textPrimary">scissors</Text>
       </TextGridContainer>
 
-      <ScoreGridContainer item component="div" xs={4} md={2} lg={2}>
+      <ScoreGridContainer item component="div" xs={3} md={2} lg={2}>
         <ScoreText variant="body2" color="textPrimaryScore">SCORE</ScoreText>
-        <ScoreValue variant="caption" color="textSecondary">0</ScoreValue>
+        <ScoreValue variant="caption" color="textSecondary">
+          <ScoreHelper />
+        </ScoreValue>
       </ScoreGridContainer>
     </StyledGrid>
   );

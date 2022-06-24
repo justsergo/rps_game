@@ -7,7 +7,6 @@ import shadows from "./shadows";
 import typography from "./typography";
 
 const defaultTheme = {
-  // spacing 1 === 8px
   spacing: 1,
 
   breakpoints: {

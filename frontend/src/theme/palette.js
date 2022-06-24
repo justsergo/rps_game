@@ -14,9 +14,9 @@ const palette = {
   },
 
   gradient: {
-    paperGradient: "radial-gradient(hsl(230, 89%, 62%), hsl(230, 89%, 65%))",
-    rockGradient: "radial-gradient(hsl(349, 71%, 52%), hsl(349, 70%, 56%))",
-    scissorsGradient: "radial-gradient(hsl(39, 89%, 49%), hsl(40, 84%, 53%))",
+    paperGradient: "hsl(230, 89%, 62%)",
+    rockGradient: "hsl(349, 71%, 52%)",
+    scissorsGradient: "hsl(39, 89%, 49%)",
     lizardGradient: "hsl(261, 73%, 60%)",
   },
 

@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 
 import Layout from "../components/Layout";
-import Battle from "../pages/Battle";
-import Menu from "../pages/Menu";
+import Battle from "../pages/single_player/Battle";
+import Menu from "../pages/single_player/Menu";
 import StartPage from "../pages/StartPage";
 
 const RoutesManager = () => {

@@ -3,20 +3,20 @@ import { Outlet } from "react-router-dom";
 
 import Footer from "../Footer";
 import Header from "../Header";
-import { StyledBox, StyledContainer } from "./styles";
+import { StyledContainer } from "./styles";
 
 const Layout = () => {
   return (
     <StyledContainer fixed>
-      <StyledBox component="div">
+      <Box component="div" sx={{ height: "15%" }}>
         <Header />
-      </StyledBox>
+      </Box>
 
-      <Box component="div" sx={{ height: "70%" }}>
+      <Box component="div" sx={{ height: "65%" }}>
         <Outlet />
       </Box>
 
-      <Box component="div" sx={{ height: "12%" }}>
+      <Box component="div" sx={{ height: "20%" }}>
         <Footer />
       </Box>
     </StyledContainer>

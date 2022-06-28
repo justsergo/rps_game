@@ -1,4 +1,4 @@
-import { Box, Container } from "@mui/material";
+import { Container } from "@mui/material";
 import styled from "styled-components";
 
 export const StyledContainer = styled(Container)`
@@ -6,9 +6,6 @@ export const StyledContainer = styled(Container)`
   width: 100vw;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-`;
-
-export const StyledBox = styled(Box)`
-  height: 18%;
+  justify-content: flex-start;
+  overflow: hidden;
 `;

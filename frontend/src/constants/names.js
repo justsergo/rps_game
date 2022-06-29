@@ -3,3 +3,9 @@ export const GAME_ITEMS = {
   PAPER: "PAPER",
   SCISSORS: "SCISSORS",
 };
+
+export const TEXT_FIELD_NAMES = {
+  USERNAME: "username",
+  PASSWORD: "password",
+  CONFIRM_PASSWORD: "confirmPassword",
+};

@@ -18,6 +18,7 @@ const StartPage = () => {
   const [modal, setModal] = useState(false);
 
   const toPlay = () => navigate("game");
+  const toAuth = () => navigate("auth");
 
   const openModal = () => setModal(true);
   const closeModal = () => setModal(false);
@@ -63,7 +64,6 @@ const StartPage = () => {
           >
             MULTIPLAYER
           </Link>
-
           <Popover
             id={id}
             open={isOpen}
@@ -82,6 +82,20 @@ const StartPage = () => {
             </Typography>
           </Popover>
         </Grid>
+
+        <Grid item>
+          <Link
+            component="button"
+            variant="body1"
+            color="textPrimary"
+            aria-describedby={id}
+            onClick={toAuth}
+            sx={style.authLink}
+          >
+            AUTHENTICATION
+          </Link>
+        </Grid>
+
       </Grid>
 
       <Grid container flexDirection="column" alignItems="center" spacing={30}>

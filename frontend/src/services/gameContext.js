@@ -11,6 +11,7 @@ const GameContextProvider = ({ children }) => {
   const [myChoice, setMyChoice] = useState(null);
   const [computerChoice, setComputerChoice] = useState(null);
   const [resultPoint, setResultPoint] = useState(null);
+  const [isBattle, toggleBattle] = useState(false);
 
   const newComputerChoice = useCallback(() => {
     const randomChoice = Math.floor(Math.random() * Object.keys(GAME_ITEMS).length);
@@ -33,7 +34,9 @@ const GameContextProvider = ({ children }) => {
     result,
     resultPoint,
     clearChoice,
-  }), [setMyChoice, myChoice, computerChoice, newComputerChoice, result, resultPoint]);
+    isBattle,
+    toggleBattle,
+  }), [setMyChoice, myChoice, computerChoice, newComputerChoice, result, resultPoint, isBattle, toggleBattle]);
 
   return (
     <GameContext.Provider value={contextValue}>

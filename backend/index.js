@@ -78,15 +78,11 @@ io.on("connection", socket => {
     socket.join(id);  
   });
 
-
-
   // join room
-  socket.on("join-room", roomId => {
-
+  socket.on("join-room", (roomId, playerName) => {
     socket.join(roomId)
     socket.emit("connected-to-room", roomId);
-    socket.broadcast.to(roomId).emit("player-2-connected");
-    
+    socket.broadcast.to(roomId).emit(`player-${playerName}-connected`);    
   });
 
   // TODO:
@@ -102,23 +98,11 @@ io.on("connection", socket => {
   // socket.on("delete-room", () => {
    
   // });
-  
-  //TODO:
-  // make battle for a lot of people in room
-  // socket.on("battle", ({
-  //   player1Chose,
-  //   player2Chose,
-  //   roomId
-  // }) => {
-  //   const result = getWinPoints(player1Chose, player2Chose)
-  //   socket.broadcast.to(roomId).emit("battle-result",result)
-  // });
 
-  socket.on("single-battle", (playerChoice)=>{
-    const varibleToChoice = [0,1,2];
-    const computerChoice = varibleToChose[Math.floor(Math.random() * varibleToChoice.length)];
-    const result = getWinPoints(playerChoice, computerChoice)
-    socket.emit("single-battle-result",result)
+  //battle method
+  socket.on("battle", (playerChoices)=>{
+    const result = getWinPoints(playerChoices)
+    socket.broadcast.to(roomId).emit("battle-result",result)   
   })
  
   //chat method

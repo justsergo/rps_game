@@ -31,11 +31,17 @@ const IconButton = styled(Button)`
     }
   };
 
-  will-change: top;
-  animation: ${({ isShake }) => isShake && "shake 0.4s 3"};
+ 
+  
+  grid-area: ${({ gridArea }) => gridArea};
 
   &::before {
     animation: ${({ $isWin }) => $isWin && "win 1s linear 3 forwards"};
+  }
+
+  &:hover {
+    will-change: top;
+    animation: ${({ isShake }) => isShake && "shake 0.4s 3"};
   }
 `;
 

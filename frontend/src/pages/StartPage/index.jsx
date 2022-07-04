@@ -30,7 +30,7 @@ const StartPage = () => {
 
   return (
     <StyledGrid container xs={10}>
-      <Grid container xs="auto" spacing={2} sx={{ flexDirection: "column" }}>
+      <Grid container spacing={2} sx={{ flexDirection: "column" }}>
         <Grid item>
           <StyledTitle variant="caption">Rock Paper Scissors</StyledTitle>
         </Grid>

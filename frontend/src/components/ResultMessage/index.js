@@ -2,13 +2,11 @@ import {
   Box, Button, Grow, Typography,
 } from "@mui/material";
 import { useContext, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { GameContext } from "../../services/gameContext";
 
 const ResultMessage = () => {
-  const navigate = useNavigate();
-  const { resultPoint, clearChoice } = useContext(GameContext);
+  const { resultPoint, clearChoice, toggleBattle } = useContext(GameContext);
 
   const messageOptions = useMemo(() => {
     switch (resultPoint) {
@@ -25,7 +23,7 @@ const ResultMessage = () => {
   const [firstValue, secondValue] = messageOptions;
 
   const backTo = () => {
-    navigate("/game");
+    toggleBattle(false);
     clearChoice();
   };
 

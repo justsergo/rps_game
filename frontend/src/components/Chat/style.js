@@ -32,12 +32,13 @@ export const FormChat = styled.form`
   position: absolute;
   bottom: 0;
   @media (max-width: 450px) {
-    height: 200px
+    height: 200px;
+    width: 70%; 
   }
 `;
 
 export const AreaMessage = styled(TextareaAutosize)`
-  width: 80%;
+  width: 90%;
   resize: none;
   &::-webkit-scrollbar {
     width: 0;
@@ -48,6 +49,7 @@ export const InsertZone = styled(Grid)`
   height: 20%;
   width: 100%;
   justify-content: space-between;
+  flex-wrap: nowrap;
   box-sizing: border-box;
   padding: 0 10px;
   background-color: #071727;

@@ -14,6 +14,10 @@ const SingleBattle = () => {
   const [counter, setCounter] = useState(3);
 
   useEffect(() => {
+
+  });
+
+  useEffect(() => {
     newComputerChoice();
   }, []);
 

@@ -100,7 +100,7 @@ io.on("connection", socket => {
   // });
 
   //battle method
-  socket.on("battle", (playerChoices)=>{
+  socket.on("battle", (playerChoices, roomId)=>{
     const result = getWinPoints(playerChoices)
     socket.broadcast.to(roomId).emit("battle-result",result)   
   })

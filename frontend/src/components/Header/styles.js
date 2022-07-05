@@ -56,3 +56,13 @@ export const ScoreValue = styled(Typography)`
     font-size: 2rem;
   }
 `;
+
+export const AvailableRooms = styled.div`
+position: absolute;
+color: #ffffff;
+top: 0;
+left: 46%;
+width: 210px;
+height: 120px;
+overflow: hidden;
+`;

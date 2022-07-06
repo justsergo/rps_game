@@ -34,12 +34,10 @@ const usersRouter = require('./routes/users');
 app.use('/users', usersRouter(app, express));
 
 const {
-  createRoom,
-  joinRoom,
-  exitRoom,
+  
   getWinPoints,
  
-} = require("./utils/rooms");
+} = require("./utils/battle");
 
 
 
@@ -100,7 +98,7 @@ io.on("connection", socket => {
   // });
 
   //battle method
-  socket.on("battle", (playerChoices)=>{
+  socket.on("battle", (playerChoices,roomId)=>{
     const result = getWinPoints(playerChoices)
     socket.broadcast.to(roomId).emit("battle-result",result)   
   })

@@ -28,7 +28,7 @@ module.exports = (_, express) => {
 
   const router = express.Router();
 
-  router.route('/')
+  router.route('/registration')
     .post(async (req, res) => {
       const hashedPassword = await hash(req.body.password)
       try {
@@ -45,40 +45,17 @@ module.exports = (_, express) => {
             singleDraws: 0
           }
         });
-        res.json('User added!');
+        res.json('User added successfull!');
 
       } catch (error) {
         res.status(400).json('Error: ' + error);
       }
     })
-    .get(async (_, res) => {
-      try {
-
-        const users = await Users.find();
-        res.json(users);
-
-      } catch (error) {
-        res.status(400).json('Error: ' + error);
-      }
-    });
-
-  router.route('/:id/stats').put(async (req, res) => {
-    try {
-
-      const existUser = await Users.findOne({
-        _id: req.params.id
-      });
-      existUser.score = req.body.score;
-      const updatedUser = await existUser.save();
-      res.send(updatedUser);
-
-    } catch (error) {
-      res.status(400).json('Error: ' + error);
-    }
-  });
-
+  
   router.route('/login').post(async (req, res) => {
     try {
+
+      //TODO: return user obj
 
       const {
         username,
@@ -93,13 +70,28 @@ module.exports = (_, express) => {
 
       const isValid = await verify(password, user.password)
 
-      if (!isValid) throw new Error('Incorrect password')
+      if (!isValid) throw new Error('Incorrect password or email')
 
-      res.send('Login successfull')
+      res.json('Login successfull', user)
 
     } catch (error) {
       res.json('' + error).status(403)
     }
   })
-  return router
+
+router.route('/:id/updateStats').put(async (req, res) => {
+  try {
+
+    const existUser = await Users.findOne({
+      _id: req.params.id
+    });
+    existUser.score = req.body.score;
+    const updatedUser = await existUser.save();
+    res.send(updatedUser);
+
+  } catch (error) {
+    res.status(400).json('Error: ' + error);
+  }
+});
+return router
 };

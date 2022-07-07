@@ -15,12 +15,30 @@ const userSchema = new Schema({
         trim: true,
     },
     score: {
-        multiWins: Number,
-        mulitLose: Number,
-        mulitiDraws: Number,
-        singleWins: Number,
-        singleLose: Number,
-        singleDraws: Number
+        multiWins: {
+            type: Number,
+            default: 0,
+        },
+        mulitLose: {
+            type: Number,
+            default: 0,
+        },
+        mulitiDraws: {
+            type: Number,
+            default: 0,
+        },
+        singleWins: {
+            type: Number,
+            default: 0,
+        },
+        singleLose: {
+            type: Number,
+            default: 0,
+        },
+        singleDraws:  {
+            type: Number,
+            default: 0,
+        }
     },
 });
 

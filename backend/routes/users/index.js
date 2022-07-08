@@ -37,10 +37,10 @@ module.exports = (_, express) => {
           username: req.body.username,
           password: hashedPassword
         });
-        res.json('User added successfull!');
+        res.send('User added successfull!');
 
       } catch (error) {
-        res.status(400).json('Error: ' + error);
+        res.status(400).send('Error: ' + error);
       }
     })
   
@@ -69,21 +69,22 @@ module.exports = (_, express) => {
     }
   })
 
-router.route('/:id/updateStats').put(async (req, res) => {
-  try {
+  router.route('/:id/updateStats').put(async (req, res) => {
+    try {
 
-    const existUser = await Users.findOne({
-      _id: req.params.id
-    });
+      const existUser = await Users.findOne({
+        _id: req.params.id
+      });
 
-    existUser.score = req.body.score;
+      existUser.score = req.body.score;
 
-    const updatedUser = await existUser.save();
-    res.json(updatedUser);
+      const updatedUser = await existUser.save();
+      res.json(updatedUser);
 
-  } catch (error) {
-    res.status(400).json('Error: ' + error);
-  }
-});
-return router
+    } catch (error) {
+      res.status(400).send('Error: ' + error);
+    }
+  });
+
+  return router
 };

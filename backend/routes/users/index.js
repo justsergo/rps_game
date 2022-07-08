@@ -28,55 +28,22 @@ module.exports = (_, express) => {
 
   const router = express.Router();
 
-  router.route('/')
+  router.route('/registration')
     .post(async (req, res) => {
       const hashedPassword = await hash(req.body.password)
       try {
 
         await Users.create({
           username: req.body.username,
-          password: hashedPassword,
-          score: {
-            multiWins: 0,
-            mulitLose: 0,
-            mulitiDraws: 0,
-            singleWins: 0,
-            singleLose: 0,
-            singleDraws: 0
-          }
+          password: hashedPassword
         });
-        res.json('User added!');
+        res.send('User added successfull!');
 
       } catch (error) {
-        res.status(400).json('Error: ' + error);
+        res.status(400).send('Error: ' + error);
       }
     })
-    .get(async (_, res) => {
-      try {
-
-        const users = await Users.find();
-        res.json(users);
-
-      } catch (error) {
-        res.status(400).json('Error: ' + error);
-      }
-    });
-
-  router.route('/:id/stats').put(async (req, res) => {
-    try {
-
-      const existUser = await Users.findOne({
-        _id: req.params.id
-      });
-      existUser.score = req.body.score;
-      const updatedUser = await existUser.save();
-      res.send(updatedUser);
-
-    } catch (error) {
-      res.status(400).json('Error: ' + error);
-    }
-  });
-
+  
   router.route('/login').post(async (req, res) => {
     try {
 
@@ -93,13 +60,31 @@ module.exports = (_, express) => {
 
       const isValid = await verify(password, user.password)
 
-      if (!isValid) throw new Error('Incorrect password')
+      if (!isValid) throw new Error('Incorrect password or email')
 
-      res.send('Login successfull')
+      res.status(200).json(user);
 
     } catch (error) {
       res.json('' + error).status(403)
     }
   })
+
+  router.route('/:id/updateStats').put(async (req, res) => {
+    try {
+
+      const existUser = await Users.findOne({
+        _id: req.params.id
+      });
+
+      existUser.score = req.body.score;
+
+      const updatedUser = await existUser.save();
+      res.json(updatedUser);
+
+    } catch (error) {
+      res.status(400).send('Error: ' + error);
+    }
+  });
+
   return router
 };

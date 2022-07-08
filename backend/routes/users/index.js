@@ -79,7 +79,6 @@ router.route('/:id/updateStats').put(async (req, res) => {
     existUser.score = req.body.score;
 
     const updatedUser = await existUser.save();
-
     res.json(updatedUser);
 
   } catch (error) {

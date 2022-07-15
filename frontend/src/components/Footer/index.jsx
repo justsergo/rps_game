@@ -13,7 +13,7 @@ const Footer = () => {
   const [isOpen, toggleChat] = useState(false);
   const navigate = useNavigate();
   return (
-    <Wrapper container xs={12}>
+    <Wrapper container>
 
       {isOpen && <Chat isOpen={isOpen} onClose={() => toggleChat(false)} />}
 

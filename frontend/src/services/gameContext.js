@@ -1,42 +1,81 @@
 import {
-  createContext, useCallback, useMemo, useState,
+  createContext, useEffect, useMemo, useState,
 } from "react";
-
-import { getWinPoints } from "../common/utils/getWinPoints";
-import { GAME_ITEMS } from "../constants/names";
+import { io } from "socket.io-client";
 
 export const GameContext = createContext(null);
 
+const socket = io("/");
+
 const GameContextProvider = ({ children }) => {
-  const [myChoice, setMyChoice] = useState(null);
-  const [computerChoice, setComputerChoice] = useState(null);
-  const [resultPoint, setResultPoint] = useState(null);
   const [isBattle, toggleBattle] = useState(false);
 
-  const newComputerChoice = useCallback(() => {
-    const randomChoice = Math.floor(Math.random() * Object.keys(GAME_ITEMS).length);
-    setComputerChoice(Object.values(GAME_ITEMS)[randomChoice]);
-  }, []);
+  const [result, setResultBattle] = useState({
+    conclusion: "",
+    user: "",
+    computer: "",
+  });
 
-  const result = useCallback(() => {
-    setResultPoint(getWinPoints(myChoice, computerChoice));
-  }, [computerChoice, myChoice]);
+  const [messageOptions, setMessageOptions] = useState([]);
 
-  const clearChoice = () => {
-    setResultPoint(null);
+  const [score, setScore] = useState(0);
+
+  const [counter, setCounter] = useState(3);
+
+  useEffect(() => {
+    if (result.conclusion === result.user && !counter) {
+      setMessageOptions(["You", "Win"]);
+      setScore((s) => s + 1);
+    }
+    if (result.conclusion === result.computer && !counter) {
+      setMessageOptions(["You", "Lose"]);
+      setScore((s) => s - 1);
+    }
+    if (result.conclusion === null && !counter) {
+      setMessageOptions(["Draw", ""]);
+      setScore((s) => s + 0);
+    }
+  }, [result, counter]);
+
+  useEffect(() => {
+    let timer = 0;
+    if (isBattle) {
+      timer = counter > 0 ? setTimeout(() => {
+        setCounter(counter - 1);
+      }, 1000) : 0;
+    }
+    if (!isBattle) {
+      setCounter(3);
+      clearTimeout(timer);
+    }
+  }, [isBattle, counter]);
+
+  const emitUserChoice = ({ playerChoice }) => {
+    socket.emit("single-battle", { playerChoices: playerChoice, roomId: "free1" });
+    toggleBattle(true);
   };
 
+  useEffect(() => {
+    socket.on("single-battle-result", (res) => {
+      setResultBattle({
+        conclusion: res.conclusion,
+        computer: res.computer,
+        user: res.user,
+      });
+    });
+    return () => socket.off("single-battle-result");
+  }, []);
+
   const contextValue = useMemo(() => ({
-    setMyChoice,
-    myChoice,
-    computerChoice,
-    newComputerChoice,
-    result,
-    resultPoint,
-    clearChoice,
     isBattle,
     toggleBattle,
-  }), [setMyChoice, myChoice, computerChoice, newComputerChoice, result, resultPoint, isBattle, toggleBattle]);
+    socket,
+    emitUserChoice,
+    result,
+    messageOptions,
+    score,
+    counter,
+  }), [isBattle, toggleBattle, result, messageOptions, score, counter]);
 
   return (
     <GameContext.Provider value={contextValue}>

@@ -3,9 +3,11 @@ import SendIcon from "@mui/icons-material/Send";
 import {
   Button, Grid, IconButton, Slide, Typography,
 } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
-import io from "socket.io-client";
+import React, {
+  useContext, useEffect, useRef, useState,
+} from "react";
 
+import { GameContext } from "../../services/gameContext";
 import {
   AreaMessage, ChatMessages, FormChat, InsertZone,
 } from "./style";
@@ -20,12 +22,12 @@ const RenderChatMessages = ({ chat, nickName }) => {
 };
 
 const Chat = ({ isOpen, onClose }) => {
+  const { socket } = useContext(GameContext);
   const [messages, setMessages] = useState({ message: "", name: "" });
   const [chat, setChat] = useState([]);
 
   const nickName = "TEST"; // TODO: take nickname from auth nickname
 
-  const socketRef = useRef();
   const messageRef = useRef();
 
   useEffect(() => {
@@ -34,16 +36,13 @@ const Chat = ({ isOpen, onClose }) => {
     }
   });
 
-  useEffect(
-    () => {
-      socketRef.current = io("/");
-      socketRef.current.on("message", ({ name, message }) => {
+  useEffect(() => {
+    if (socket) {
+      socket.on("message", ({ name, message }) => {
         setChat([...chat, { name, message }]);
       });
-      return () => socketRef.current.disconnect();
-    },
-    [chat],
-  );
+    }
+  }, [chat, socket, messages]);
 
   const onTextChange = (e) => {
     setMessages({ ...messages, [e.target.name]: e.target.value });
@@ -51,7 +50,7 @@ const Chat = ({ isOpen, onClose }) => {
 
   const onMessageSubmit = (e) => {
     const { message } = messages;
-    socketRef.current.emit("message", { nickName, message });
+    socket.emit("message", { nickName, message });
     e.preventDefault();
     setMessages({ message: "", nickName });
   };

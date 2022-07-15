@@ -33,7 +33,7 @@ const IconButton = styled(Button)`
 
  
   
-  grid-area: ${({ gridArea }) => gridArea};
+  grid-area: ${({ $gridArea }) => $gridArea};
 
   &::before {
     animation: ${({ $isWin }) => $isWin && "win 1s linear 3 forwards"};
@@ -41,7 +41,7 @@ const IconButton = styled(Button)`
 
   &:hover {
     will-change: top;
-    animation: ${({ isShake }) => isShake && "shake 0.4s 3"};
+    animation: ${({ $isShake }) => $isShake && "shake 0.4s 3"};
   }
 `;
 

@@ -1,11 +1,11 @@
 import { Box, Grid } from "@mui/material";
 import { useContext } from "react";
 
-import { GameResultGrid, StyledTypography } from "../../pages/single_player/Battle/styles";
 import { GameContext } from "../../services/gameContext";
 import ChoiceButton from "../ChoiceButton";
 import GameItemContainer from "../GameItemContainer";
 import ResultMessage from "../ResultMessage";
+import { GameResultGrid, StyledTypography } from "./style";
 
 const SingleBattle = () => {
   const { result, counter } = useContext(GameContext);

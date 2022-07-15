@@ -50,10 +50,13 @@ const GameContextProvider = ({ children }) => {
     }
   }, [isBattle, counter]);
 
-  const emitUserChoice = ({ playerChoice }) => {
+  const emitSingleUserChoice = ({ playerChoice }) => {
     socket.emit("single-battle", { playerChoices: playerChoice, roomId: "free1" });
     toggleBattle(true);
   };
+
+  const createSingleRoom = () => { socket.emit("join-room", { roomId: "free1", playerName: socket.id }); };
+  const leaveSingleRoom = () => { socket.emit("leave-room", { roomId: "free1", playerName: socket.id }); };
 
   useEffect(() => {
     socket.on("single-battle-result", (res) => {
@@ -67,10 +70,12 @@ const GameContextProvider = ({ children }) => {
   }, []);
 
   const contextValue = useMemo(() => ({
+    createSingleRoom,
+    leaveSingleRoom,
     isBattle,
     toggleBattle,
     socket,
-    emitUserChoice,
+    emitSingleUserChoice,
     result,
     messageOptions,
     score,

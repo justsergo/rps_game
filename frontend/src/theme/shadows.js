@@ -4,6 +4,7 @@ const shadows = {
   winLayerOne: "0 0 0 20px rgba(121, 153, 238, 0.05)",
   winLayerTwo: "0 0 0 40px rgba(141, 162, 245, 0.04)",
   winLayerThree: "0 0 0 60px rgba(234, 235, 241, 0.02)",
+  1: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
 };
 
 export default shadows;

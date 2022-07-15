@@ -36,6 +36,10 @@ const palette = {
     textBlue: "#1b2b4c",
   },
 
+  textField: {
+    hover: "#0971f1",
+  },
+
 };
 
 export default palette;

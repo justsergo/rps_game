@@ -63,6 +63,12 @@ export default {
       fontSize: "1.7rem",
     },
   }),
+  authLink: (theme) => ({
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1rem",
+      paddingBottom: "15px",
+    },
+  }),
   rules: (theme) => ({
     [theme.breakpoints.down("sm")]: {
       fontSize: "1rem",

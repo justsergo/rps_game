@@ -6,7 +6,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { RulesImage } from "../../assets/images";
-import ModalComponent from "../../components/Modal";
+import ModalWrapper from "../../components/Modal";
+import RoomsModalContainer from "../../components/RoomsModal";
+import theme from "../../theme";
 import style, {
   StyledGrid, StyledSubtitle, StyledTitle,
 } from "./styles";
@@ -28,6 +30,10 @@ const StartPage = () => {
 
   const isOpen = Boolean(anchorEl);
   const id = isOpen ? "simple-popover" : undefined;
+
+  const [openRoomsModal, setOpenRoomsModal] = useState(false);
+  const roomsModal = () => setOpenRoomsModal(true);
+  const closeRoomsModal = () => setOpenRoomsModal(false);
 
   return (
     <StyledGrid container item xs={10}>
@@ -96,6 +102,11 @@ const StartPage = () => {
           </Link>
         </Grid>
 
+        <Grid item>
+          <Button variant="outlined" color="common" size="small" onClick={roomsModal}>rooms modal</Button>
+          <RoomsModalContainer isOpen={openRoomsModal} close={closeRoomsModal} />
+        </Grid>
+
       </Grid>
 
       <Grid container flexDirection="column" alignItems="center" spacing={30}>
@@ -109,9 +120,15 @@ const StartPage = () => {
 
         <Grid item>
           <Button variant="outlined" color="common" size="small" onClick={openModal}>see the rules</Button>
-          <ModalComponent isOpen={modal} close={closeModal}>
+          <ModalWrapper
+            isOpen={modal}
+            close={closeModal}
+            background={theme.palette.background.headerOutline}
+            width="400px"
+            padding="16px"
+          >
             <RulesImage />
-          </ModalComponent>
+          </ModalWrapper>
         </Grid>
 
       </Grid>

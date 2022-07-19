@@ -8,4 +8,6 @@ export const TEXT_FIELD_NAMES = {
   USERNAME: "username",
   PASSWORD: "password",
   CONFIRM_PASSWORD: "confirmPassword",
+  JOIN_ROOM: "joinRoom",
+  CREATE_ROOM: "createRoom",
 };

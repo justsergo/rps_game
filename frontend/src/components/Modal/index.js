@@ -1,9 +1,11 @@
-import { Fade, Modal } from "@mui/material";
+import { Modal } from "@mui/material";
 import Backdrop from "@mui/material/Backdrop";
 
-import { StyledBox } from "./styles";
+import { StyledPaper } from "./styles";
 
-const ModalComponent = ({ children, isOpen, close }) => {
+const ModalWrapper = ({
+  children, isOpen, close, background, width, height, padding, smWidth, smHeight,
+}) => {
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -16,13 +18,18 @@ const ModalComponent = ({ children, isOpen, close }) => {
         timeout: 500,
       }}
     >
-      <Fade in={isOpen}>
-        <StyledBox>
-          {children}
-        </StyledBox>
-      </Fade>
+      <StyledPaper
+        background={background}
+        width={width}
+        height={height}
+        padding={padding}
+        smWidth={smWidth}
+        smHeight={smHeight}
+      >
+        {children}
+      </StyledPaper>
     </Modal>
   );
 };
 
-export default ModalComponent;
+export default ModalWrapper;

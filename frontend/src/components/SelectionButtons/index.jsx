@@ -14,10 +14,10 @@ const iconsInfo = [
 ];
 
 const SelectionButtons = () => {
-  const { emitUserChoice } = useContext(GameContext);
+  const { emitSingleUserChoice } = useContext(GameContext);
 
   const iconEvent = (e) => {
-    emitUserChoice({ playerChoice: e.currentTarget.id });
+    emitSingleUserChoice({ playerChoice: e.currentTarget.id });
   };
 
   return (

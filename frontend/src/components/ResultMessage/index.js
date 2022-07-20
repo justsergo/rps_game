@@ -6,13 +6,9 @@ import { useContext } from "react";
 import { GameContext } from "../../services/gameContext";
 
 const ResultMessage = () => {
-  const { toggleBattle, messageOptions } = useContext(GameContext);
+  const { backToChoice, messageOptions } = useContext(GameContext);
 
   const [firstValue, secondValue] = messageOptions;
-
-  const backTo = () => {
-    toggleBattle(false);
-  };
 
   if (messageOptions.length === 0) {
     return null;
@@ -40,7 +36,7 @@ const ResultMessage = () => {
 
       </Box>
       <div>
-        <Button size="medium" variant="contained" color="common" sx={{ mt: "20px" }} onClick={backTo}>Play again</Button>
+        <Button size="medium" variant="contained" color="common" sx={{ mt: "20px" }} onClick={() => backToChoice()}>Play again</Button>
       </div>
     </div>
   );

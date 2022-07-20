@@ -9,11 +9,13 @@ const socketio = require("socket.io");
 
 require('dotenv').config();
 
+const { RoomList } = require('./utils/roomList');
+
 const app = express();
 const port = process.env.PORT || 5000; 
 const server = http.createServer(app);
 const io = new Server(server);
-
+const roomList = new RoomList();
 
 app.use(cors());
 app.use(express.json());
@@ -37,32 +39,76 @@ const {
   getWinPoints,
   mapGameElements
 } = require("./utils/battle");
-const users = require('./routes/users');
+
+const emitAvailableRooms = () => {  
+  const freeRooms = Object.keys(roomList.getAllRooms()).filter( (i) => i !== i.length <3 );
+  io.emit("available-rooms", freeRooms);
+};
 
 io.on("connection", socket => {
-  io.of("/").adapter.on("join-room", () => {  
-    const roomsData = {};
-    io.sockets.adapter.rooms.forEach((val, key) => {
-      roomsData[key] = Array.from(val).length;
-    })
-    io.emit("available-rooms", roomsData);    
-  });
-
-  socket.on("create-room", ({roomId}) => {
+ 
+  socket.on("create-room", ({roomId, playerName}) => {
     socket.join(roomId);
-    io.to(roomId).emit(`room ${roomId} created`);
+    roomList.addRoom(roomId);
+    roomList.addPlayer(roomId, socket.id, playerName);
+    io.to(roomId).emit("created", roomId);
+    emitAvailableRooms();
   });
 
   socket.on("join-room", ({roomId, playerName}) => {
-    socket.join(roomId);
-    io.to(roomId).emit(`player ${playerName} connected`);
+    const keysRoom = Object.keys(roomList.getRoom(roomId));
+    if (keysRoom.length < 3) {
+
+      socket.join(roomId);
+      roomList.addPlayer(roomId, socket.id, playerName);
+      io.to(roomId).emit("joined", roomList.getPlayers(roomId, socket.id));
+      emitAvailableRooms();
+
+    } else {
+
+      io.to(roomId).emit("joined", `${roomId} already exist`);
+
+    }  
   });
   
-  socket.on("leave-room",({roomId,playerName})=>{
+  socket.on("leave-room",({roomId}) => {
     socket.leave(roomId);
-    io.to(roomId).emit(`player ${playerName} disconnected`);
+    roomList.removePlayer(roomId, socket.id);
+    io.to(roomId).emit("leaved", roomList.getPlayers(roomId, socket.id));
+    emitAvailableRooms();
   })
-  
+
+  socket.on("remove-room",({roomId})=>{
+    roomList.removeRoom(roomId);
+    emitAvailableRooms();
+  }); 
+
+  socket.on("choice",({choice, roomId}) => {
+    roomList.changeChoice(roomId, socket.id, choice);
+    roomList.changeStatus(roomId, socket.id, 'done');
+    const playerInRoom = roomList.getPlayers(roomId, socket.id);
+    const notReadyPlayers = Object.values(playerInRoom).filter((item)=>item.status !== 'done');
+    if(notReadyPlayers.length === 0) {
+      io.to(roomId).emit("choice-result", getRoom(roomId));
+      roomList.changeChoice(roomId, socket.id, '');
+    }
+  });
+
+  socket.on("status",({status, roomId}) => {
+    roomList.changeStatus(roomId, socket.id, status);
+    io.to(roomId).emit("status-result", roomList.getRoom(roomId)); 
+  });
+
+  socket.on("multi-battle", ({playerChoices, roomId})=>{
+    const output = getWinPoints(playerChoices);
+    const result = {
+      conclusion: output,
+      user: output[1],
+      oponents: output[0]
+    }
+    io.to(roomId).emit("multi-battle-result",result)   
+  });
+
   socket.on("single-battle", ({playerChoices, roomId})=>{
     const varibleToChoice = [mapGameElements.ROCK.title, mapGameElements.PAPER.title, mapGameElements.SCISSORS.title];
     const computerChoice = varibleToChoice[Math.floor(Math.random() * varibleToChoice.length)];
@@ -74,17 +120,7 @@ io.on("connection", socket => {
       computer: choices[0]
     }
     io.to(roomId).emit("single-battle-result",result)
-  })
-
-  socket.on("multi-battle", ({playerChoices, roomId})=>{
-    const output = getWinPoints(playerChoices);
-    const result = {
-      conclusion: output,
-      user: choices[1],
-      oponents: choices[0]
-    }
-    io.to(roomId).emit("multi-battle-result",result)   
-  })
+  });
 
   socket.on('message', ({ name, message }) => {
     io.emit('message', { name, message })

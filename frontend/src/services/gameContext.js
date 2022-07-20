@@ -1,5 +1,5 @@
 import {
-  createContext, useEffect, useMemo, useState,
+  createContext, useCallback, useEffect, useMemo, useState,
 } from "react";
 import { io } from "socket.io-client";
 
@@ -8,7 +8,19 @@ export const GameContext = createContext(null);
 const socket = io("/");
 
 const GameContextProvider = ({ children }) => {
-  const [isBattle, toggleBattle] = useState(false);
+  const [isBattle, toggleBattle] = useState({
+    single: false,
+    multi: false,
+  });
+
+  const [rooms, setRooms] = useState({
+    availableRooms: [],
+    currentRoom: "example",
+  });
+
+  const [userName, setUserName] = useState("");
+
+  const [players, setPlayers] = useState([{ user: userName, status: "" }]);
 
   const [result, setResultBattle] = useState({
     conclusion: "",
@@ -16,47 +28,49 @@ const GameContextProvider = ({ children }) => {
     computer: "",
   });
 
+  const [multiBattleResult, setMultiBattleResult] = useState({
+    conclusion: "",
+    user: "",
+    oponents: "",
+  });
+
   const [messageOptions, setMessageOptions] = useState([]);
 
   const [score, setScore] = useState(0);
 
-  const [counter, setCounter] = useState(3);
+  const [gameTimer, setGameTimer] = useState(3);
 
   useEffect(() => {
-    if (result.conclusion === result.user && !counter) {
+    setUserName(localStorage.getItem("username"));
+  }, []);
+
+  useEffect(() => {
+    if (result.conclusion === result.user && !gameTimer) {
       setMessageOptions(["You", "Win"]);
       setScore((s) => s + 1);
     }
-    if (result.conclusion === result.computer && !counter) {
+    if (result.conclusion === result.computer && !gameTimer) {
       setMessageOptions(["You", "Lose"]);
       setScore((s) => s - 1);
     }
-    if (result.conclusion === null && !counter) {
+    if (result.conclusion === null && !gameTimer) {
       setMessageOptions(["Draw", ""]);
       setScore((s) => s + 0);
     }
-  }, [result, counter]);
+  }, [result, gameTimer]);
 
   useEffect(() => {
     let timer = 0;
-    if (isBattle) {
-      timer = counter > 0 ? setTimeout(() => {
-        setCounter(counter - 1);
+    if (isBattle.single) {
+      timer = gameTimer > 0 ? setTimeout(() => {
+        setGameTimer(gameTimer - 1);
       }, 1000) : 0;
     }
-    if (!isBattle) {
-      setCounter(3);
+    if (!isBattle.single) {
+      setGameTimer(3);
       clearTimeout(timer);
     }
-  }, [isBattle, counter]);
-
-  const emitSingleUserChoice = ({ playerChoice }) => {
-    socket.emit("single-battle", { playerChoices: playerChoice, roomId: "free1" });
-    toggleBattle(true);
-  };
-
-  const createSingleRoom = () => { socket.emit("join-room", { roomId: "free1", playerName: socket.id }); };
-  const leaveSingleRoom = () => { socket.emit("leave-room", { roomId: "free1", playerName: socket.id }); };
+  }, [isBattle.single, gameTimer]);
 
   useEffect(() => {
     socket.on("single-battle-result", (res) => {
@@ -69,18 +83,92 @@ const GameContextProvider = ({ children }) => {
     return () => socket.off("single-battle-result");
   }, []);
 
+  useEffect(() => {
+    socket.on("multi-battle-result", (res) => {
+      setMultiBattleResult({
+        conclusion: res.conclusion,
+        oponents: res.oponents,
+        user: res.user,
+      });
+    });
+    return () => socket.off("multi-battle-result");
+  }, []);
+
+  const emitSingleUserChoice = useCallback(
+    ({ playerChoice }) => {
+      socket.emit("single-battle", { playerChoices: playerChoice, roomId: socket.id });
+      toggleBattle({ ...isBattle, single: true });
+    },
+    [isBattle],
+  );
+
+  const emitMultiUserChoice = useCallback(({ playerChoice }) => {
+    socket.emit("choice", { choice: playerChoice, roomId: rooms.currentRoom });
+    toggleBattle({ ...isBattle, multi: true });
+  }, [isBattle, rooms.currentRoom]);
+
+  const createSingleRoom = () => {
+    socket.emit("create-room", { roomId: socket.id, playerName: socket.id });
+    socket.emit("join-room", { roomId: socket.id, playerName: socket.id });
+  };
+
+  const leaveSingleRoom = () => {
+    socket.emit("leave-room", { roomId: socket.id });
+  };
+
+  const leaveRoom = useCallback(() => {
+    socket.emit("leave-room", { roomId: rooms.currentRoom });
+  }, [rooms.currentRoom]);
+
+  const backToChoice = useCallback(() => {
+    toggleBattle({ ...isBattle, single: false });
+  }, [isBattle]);
+
+  socket.on("available-rooms", (newRooms) => {
+    setRooms({ ...rooms, availableRooms: newRooms });
+  });
+
+  socket.on("created", (roomId) => { setRooms({ ...rooms, currentRoom: roomId }); });
+
+  socket.on("joined", (playerNames) => { setPlayers(...players, playerNames); });
+
+  socket.on("leaved", (playerName) => { setPlayers(...players, playerName); });
+
+  socket.on("choice-result", (choice) => { setMultiBattleResult({ user: choice[socket.id].choice }); });
+
   const contextValue = useMemo(() => ({
-    createSingleRoom,
     leaveSingleRoom,
-    isBattle,
-    toggleBattle,
+    createSingleRoom,
     socket,
     emitSingleUserChoice,
     result,
     messageOptions,
     score,
-    counter,
-  }), [isBattle, toggleBattle, result, messageOptions, score, counter]);
+    counter: gameTimer,
+    rooms,
+    players,
+    emitMultiUserChoice,
+    userName,
+    multiBattleResult,
+    leaveRoom,
+    isBattle,
+    toggleBattle,
+    backToChoice,
+  }), [
+    result,
+    messageOptions,
+    score,
+    gameTimer,
+    players,
+    userName,
+    multiBattleResult,
+    isBattle,
+    backToChoice,
+    emitMultiUserChoice,
+    emitSingleUserChoice,
+    leaveRoom,
+    rooms,
+  ]);
 
   return (
     <GameContext.Provider value={contextValue}>

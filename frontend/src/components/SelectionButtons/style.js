@@ -1,8 +1,6 @@
 import { Typography } from "@mui/material";
 import styled, { keyframes } from "styled-components";
 
-import img from "../../assets/images/bg-triangle.svg";
-
 const animate = keyframes`
   0%, 18%, 20%, 50.1%, 65.1%, 80%, 90.1%, 92% {
     color: ${({ theme }) => theme.palette.text.secondary};
@@ -15,26 +13,6 @@ const animate = keyframes`
     0 0 40px #03bcf4,
     0 0 80px #03bcf4,
     0 0 160px #03bcf4;
-  }
-`;
-
-export const IconGridWrap = styled.div`
-  display: grid; 
-  margin-top: 5%;
-  grid-template-columns: 1fr 1fr 1fr; 
-  grid-template-rows: 1fr 1fr 1fr; 
-  gap: 0px 0px; 
-  grid-template-areas: 
-      "leftUp . rightUp"
-      ". . ."
-      ". down ."; 
-  background-image: url(${img});
-  background-repeat: no-repeat;
-  background-size: 80%;
-  background-position-x: 50%;
-  background-position-y: 50%;
-  @media (max-width: 450px) {
-    margin-top: 30%;
   }
 `;
 

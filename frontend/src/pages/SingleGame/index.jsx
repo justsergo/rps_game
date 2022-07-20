@@ -9,8 +9,8 @@ const SingleGame = () => {
   useEffect(() => {
     createSingleRoom();
     return () => leaveSingleRoom();
-  }, [leaveSingleRoom, createSingleRoom]);
-  if (isBattle) {
+  }, []);
+  if (isBattle.single) {
     return <SingleBattle />;
   }
   return <SelectionButtons />;

@@ -25,7 +25,8 @@ const StartPage = () => {
   const openModal = () => setModal(true);
   const closeModal = () => setModal(false);
 
-  const openPopup = (event) => setAnchorEl(event.currentTarget);
+  // const openPopup = (event) => setAnchorEl(event.currentTarget);
+  const openPopup = () => navigate("game/multi");
   const closePopup = () => setAnchorEl(null);
 
   const isOpen = Boolean(anchorEl);

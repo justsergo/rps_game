@@ -2,8 +2,8 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import Auth from "../components/Auth";
 import Layout from "../components/Layout";
+import MultiGame from "../components/MultiGame";
 import SingleGame from "../components/SingleGame";
-import Battle from "../pages/single_player/Battle";
 import StartPage from "../pages/StartPage";
 
 const RoutesManager = () => {
@@ -25,7 +25,7 @@ const RoutesManager = () => {
         />
         <Route path="game" element={<Layout />}>
           <Route index element={<SingleGame />} />
-          <Route path="battle" element={<Battle />} />
+          <Route path="multi" element={<MultiGame />} />
         </Route>
       </Routes>
     </>

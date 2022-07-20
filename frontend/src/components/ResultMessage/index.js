@@ -6,12 +6,12 @@ import { useContext } from "react";
 import { GameContext } from "../../services/gameContext";
 
 const ResultMessage = () => {
-  const { toggleBattle, messageOptions } = useContext(GameContext);
+  const { toggleSingleBattle, messageOptions } = useContext(GameContext);
 
   const [firstValue, secondValue] = messageOptions;
 
   const backTo = () => {
-    toggleBattle(false);
+    toggleSingleBattle(false);
   };
 
   if (messageOptions.length === 0) {

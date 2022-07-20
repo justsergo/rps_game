@@ -22,11 +22,9 @@ const RenderChatMessages = ({ chat, nickName }) => {
 };
 
 const Chat = ({ isOpen, onClose }) => {
-  const { socket } = useContext(GameContext);
+  const { socket, userName } = useContext(GameContext);
   const [messages, setMessages] = useState({ message: "", name: "" });
   const [chat, setChat] = useState([]);
-
-  const nickName = "TEST"; // TODO: take nickname from auth nickname
 
   const messageRef = useRef();
 
@@ -50,9 +48,9 @@ const Chat = ({ isOpen, onClose }) => {
 
   const onMessageSubmit = (e) => {
     const { message } = messages;
-    socket.emit("message", { nickName, message });
+    socket.emit("message", { userName, message });
     e.preventDefault();
-    setMessages({ message: "", nickName });
+    setMessages({ message: "", userName });
   };
 
   const onEnterPress = (e) => {
@@ -76,7 +74,7 @@ const Chat = ({ isOpen, onClose }) => {
         </Button>
 
         <ChatMessages container ref={messageRef}>
-          <RenderChatMessages chat={chat} nickName={nickName} />
+          <RenderChatMessages chat={chat} nickName={userName} />
         </ChatMessages>
 
         <InsertZone container>

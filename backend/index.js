@@ -38,65 +38,41 @@ const {
   mapGameElements
 } = require("./utils/battle");
 
+let rooms = {
+  room1:{
+    socketId1:{
+      playerName:'vasya', status:'ready', choice:"ROCK"
+    }
+  }
+};
 
+const availableRooms = () => {  
+  io.emit("available-rooms", Object.keys(rooms));
+};
 
 io.on("connection", socket => {
-  io.of("/").adapter.on("join-room", (room) => {
+ 
+  socket.on("create-room", ({roomId, playerName}) => {
+    socket.join(roomId);
+    rooms[roomId] = {[socket.id] : {playerName, status:'waiting', choice:''}};
+    io.to(roomId).emit("created", roomId);
+    availableRooms();
+  });
+
+  socket.on("join-room", ({roomId, playerName}) => {    
+    socket.join(roomId);
+    rooms[roomId] = {[socket.id] : {playerName, status:'waiting', choice:''}};
+    io.to(roomId).emit("joined", Object.values(rooms[roomId]).map((item)=>item.playerName));    
+    availableRooms();
+  });
   
-    const keyRoom = io.sockets.adapter.rooms.keys()
-    const roomsData = {};
-    const { roomId } = socket.handshake.query
-   
-    // TODO:
-    // take keys room (roomName) for checking available room (no more than 2 people)
-
-    // console.log(io.sockets.adapter.rooms.get('free1').values().next().value)
-    // for (let i of keyRoom) {
-    //   console.log(i)
-    // }    
-    // console.log(io.sockets.adapter.rooms[Symbol.iterator]())
-    // console.log(socket.client.sockets.keys()[0])
-
-    io.sockets.adapter.rooms.forEach((val, key) => {
-      roomsData[key] = Array.from(val).length;
-    })
-    const rooms = Array.from(io.sockets.adapter.rooms.keys());
-    io.emit("available-rooms", roomsData)
-    
-  });
-
-  // Hardcode rooms
-  socket.join('free1'); 
-
-  // TODO:
-  // make method for create room with unic name(id)
-  socket.on("create-room", () => {
-    // id=naniod();
-    socket.join(id);  
-  });
-
-  // join room
-  socket.on("join-room", (roomId, playerName) => {
-    socket.join(roomId)
-    socket.emit("connected-to-room", roomId);
-    socket.broadcast.to(roomId).emit(`player-${playerName}-connected`);    
-  });
-
-  // TODO:
-  // make methods for leave, delete,random connect  rooms
-  // socket.on("join-random", () => {
-   
-  // });
-
-  // socket.on("leave-room", () => {
-   
-  // });
-
-  // socket.on("delete-room", () => {
-   
-  // });
-
-  //battle method
+  socket.on("leave-room",({roomId}) => {
+    socket.leave(roomId);
+    delete rooms[roomId][socket.id];
+    io.to(roomId).emit("leaved", Object.values(rooms[roomId]).map((item)=>item.playerName));
+    availableRooms();
+  })
+  
   socket.on("single-battle", ({playerChoices, roomId})=>{
     const varibleToChoice = [mapGameElements.ROCK.title, mapGameElements.PAPER.title, mapGameElements.SCISSORS.title];
     const computerChoice = varibleToChoice[Math.floor(Math.random() * varibleToChoice.length)];
@@ -108,15 +84,31 @@ io.on("connection", socket => {
       computer: choices[0]
     }
     io.to(roomId).emit("single-battle-result",result)
+  });
+
+  // event send choice, event status
+
+  socket.on("choice",({choice, roomId}) => {
+    const socketData = rooms[roomId][socket.id];
+    socketData.choice = choice;
+    socketData.status = 'done';
+    const notReadyPlayers = Object.values(rooms[roomId]).filter((item)=>item.status !== 'done');
+    if(notReadyPlayers.length === 0) {
+      io.to(roomId).emit("choice-result", rooms[roomId]);
+      rooms[roomId] = Object.values(rooms[roomId]).map((item)=> ({...item, status:'waiting', choice:''}));
+    }
+  });
+
+  socket.on("multi-battle", ({playerChoices, roomId})=>{
+    const output = getWinPoints(playerChoices);
+    const result = {
+      conclusion: output,
+      user: output[1],
+      oponents: output[0]
+    }
+    io.to(roomId).emit("multi-battle-result",result)   
   })
 
-  //battle method
-  socket.on("multi-battle", ({playerChoices, roomId})=>{
-    const result = getWinPoints(playerChoices)
-    socket.broadcast.to(roomId).emit("multi-battle-result",result)   
-  })
- 
-  //chat method
   socket.on('message', ({ name, message }) => {
     io.emit('message', { name, message })
   })

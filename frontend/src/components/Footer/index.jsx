@@ -10,6 +10,7 @@ import Chat from "../Chat";
 import { Wrapper } from "./styles";
 
 const Footer = () => {
+  // TODO chat visible only on multi battle
   const [isOpen, toggleChat] = useState(false);
   const navigate = useNavigate();
   return (

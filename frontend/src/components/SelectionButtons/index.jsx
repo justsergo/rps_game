@@ -1,23 +1,15 @@
 import { Grid } from "@mui/material";
 import { useContext } from "react";
 
-import { choiceIcons } from "../../constants/choiceIcons";
-import { GAME_ITEMS } from "../../constants/names";
 import { GameContext } from "../../services/gameContext";
-import IconButton from "../Button";
-import { AnimatedTittle, IconGridWrap } from "./style";
-
-const iconsInfo = [
-  { area: "leftUp", id: GAME_ITEMS.ROCK },
-  { area: "rightUp", id: GAME_ITEMS.PAPER },
-  { area: "down", id: GAME_ITEMS.SCISSORS },
-];
+import Triangle from "../Triangle";
+import { AnimatedTittle } from "./style";
 
 const SelectionButtons = () => {
-  const { emitUserChoice } = useContext(GameContext);
+  const { emitSingleUserChoice } = useContext(GameContext);
 
   const iconEvent = (e) => {
-    emitUserChoice({ playerChoice: e.currentTarget.id });
+    emitSingleUserChoice({ playerChoice: e.currentTarget.id });
   };
 
   return (
@@ -28,22 +20,7 @@ const SelectionButtons = () => {
       }}
     >
       <AnimatedTittle spacing={45} variant="caption">make your choice</AnimatedTittle>
-
-      <IconGridWrap>
-        {iconsInfo.map((item) => (
-          <IconButton
-            key={item.id}
-            id={item.id}
-            variant="iconWrap"
-            figure={item.id}
-            onClick={iconEvent}
-            $gridArea={item.area}
-            $isShake
-          >
-            {choiceIcons[item.id]}
-          </IconButton>
-        ))}
-      </IconGridWrap>
+      <Triangle onClick={iconEvent} />
 
     </Grid>
   );

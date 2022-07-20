@@ -5,8 +5,8 @@ import SelectionButtons from "../SelectionButtons";
 import SingleBattle from "../SingleBattle";
 
 const SingleGame = () => {
-  const { isBattle } = useContext(GameContext);
-  if (isBattle) {
+  const { isSingleBattle } = useContext(GameContext);
+  if (isSingleBattle) {
     return <SingleBattle />;
   }
   return <SelectionButtons />;

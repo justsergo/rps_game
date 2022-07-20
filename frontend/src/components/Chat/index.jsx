@@ -25,10 +25,13 @@ const Chat = ({ isOpen, onClose }) => {
   const { socket } = useContext(GameContext);
   const [messages, setMessages] = useState({ message: "", name: "" });
   const [chat, setChat] = useState([]);
-
-  const nickName = "TEST"; // TODO: take nickname from auth nickname
+  const [nickName, setNickName] = useState("");
 
   const messageRef = useRef();
+
+  useEffect(() => {
+    setNickName(localStorage.getItem("username"));
+  }, []);
 
   useEffect(() => {
     if (messageRef.current) {

@@ -3,8 +3,8 @@ class RoomList {
         this.roomList = {};
     }
 
-    addRoom (roomId) {        
-        this.roomList = { ...this.roomList, [roomId]: {} };       
+    addRoom (roomId) {
+        this.roomList = { ...this.roomList, [roomId]: {} };
     }
 
     getRoom (roomId) {
@@ -20,11 +20,11 @@ class RoomList {
     }
 
     addPlayer (roomId, socketId, playerName) {
-        this.roomList[roomId] = { ...this.roomList[roomId], [socketId] : {playerName, status:'', choice:''} };      
+        this.roomList[roomId] = { ...this.roomList[roomId], [socketId] : {playerName, status:'', choice:''} };
     }
 
-    getPlayers (roomId, socketId) {
-        return this.roomList[roomId][socketId];
+    getPlayers (roomId) {
+        return Object.values(this.roomList[roomId]);
     }
 
     removePlayer (roomId, socketId) {

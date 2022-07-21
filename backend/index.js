@@ -12,7 +12,7 @@ require('dotenv').config();
 const { RoomList } = require('./utils/roomList');
 
 const app = express();
-const port = process.env.PORT || 5000; 
+const port = process.env.PORT || 5000;
 const server = http.createServer(app);
 const io = new Server(server);
 const roomList = new RoomList();
@@ -40,18 +40,23 @@ const {
   mapGameElements
 } = require("./utils/battle");
 
-const emitAvailableRooms = () => {  
+const emitAvailableRooms = () => {
   const freeRooms = Object.keys(roomList.getAllRooms()).filter( (i) => i !== i.length <3 );
   io.emit("available-rooms", freeRooms);
 };
 
 io.on("connection", socket => {
- 
+
+  socket.on("get-rooms", () => {
+    emitAvailableRooms();
+    })
+
   socket.on("create-room", ({roomId, playerName}) => {
     socket.join(roomId);
     roomList.addRoom(roomId);
     roomList.addPlayer(roomId, socket.id, playerName);
     io.to(roomId).emit("created", roomId);
+    io.to(roomId).emit("created-message", `Room "${roomId}" was created`);
     emitAvailableRooms();
   });
 
@@ -61,32 +66,31 @@ io.on("connection", socket => {
 
       socket.join(roomId);
       roomList.addPlayer(roomId, socket.id, playerName);
-      io.to(roomId).emit("joined", roomList.getPlayers(roomId, socket.id));
+      io.to(roomId).emit("joined", roomList.getPlayers(roomId));
       emitAvailableRooms();
-
     } else {
 
       io.to(roomId).emit("joined", `${roomId} already exist`);
 
-    }  
+    }
   });
-  
+
   socket.on("leave-room",({roomId}) => {
     socket.leave(roomId);
     roomList.removePlayer(roomId, socket.id);
-    io.to(roomId).emit("leaved", roomList.getPlayers(roomId, socket.id));
+    io.to(roomId).emit("leaved", roomList.getPlayers(roomId));
     emitAvailableRooms();
   })
 
   socket.on("remove-room",({roomId})=>{
     roomList.removeRoom(roomId);
     emitAvailableRooms();
-  }); 
+  });
 
   socket.on("choice",({choice, roomId}) => {
     roomList.changeChoice(roomId, socket.id, choice);
     roomList.changeStatus(roomId, socket.id, 'done');
-    const playerInRoom = roomList.getPlayers(roomId, socket.id);
+    const playerInRoom = roomList.getPlayers(roomId);
     const notReadyPlayers = Object.values(playerInRoom).filter((item)=>item.status !== 'done');
     if(notReadyPlayers.length === 0) {
       io.to(roomId).emit("choice-result", getRoom(roomId));
@@ -96,7 +100,7 @@ io.on("connection", socket => {
 
   socket.on("status",({status, roomId}) => {
     roomList.changeStatus(roomId, socket.id, status);
-    io.to(roomId).emit("status-result", roomList.getRoom(roomId)); 
+    io.to(roomId).emit("status-result", roomList.getRoom(roomId));
   });
 
   socket.on("multi-battle", ({playerChoices, roomId})=>{
@@ -106,7 +110,7 @@ io.on("connection", socket => {
       user: output[1],
       oponents: output[0]
     }
-    io.to(roomId).emit("multi-battle-result",result)   
+    io.to(roomId).emit("multi-battle-result",result)
   });
 
   socket.on("single-battle", ({playerChoices, roomId})=>{

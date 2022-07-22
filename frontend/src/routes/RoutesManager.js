@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import Auth from "../components/Auth";
 import Layout from "../components/Layout";
+import MultiGame from "../pages/MultiGame";
 import SingleGame from "../pages/SingleGame";
 import StartPage from "../pages/StartPage";
 
@@ -24,6 +25,7 @@ const RoutesManager = () => {
         />
         <Route path="game" element={<Layout />}>
           <Route index element={<SingleGame />} />
+          <Route path="multi" element={<MultiGame />} />
         </Route>
       </Routes>
     </>

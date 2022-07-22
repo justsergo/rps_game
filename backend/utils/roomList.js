@@ -35,10 +35,6 @@ class RoomList {
         this.roomList[roomId][socketId] = { ...this.roomList[roomId][socketId], status };
     }
 
-    cleanChoice () {
-
-    }
-
     changeChoice (roomId, socketId, choice) {
         this.roomList[roomId][socketId] = { ...this.roomList[roomId][socketId], choice };
     }

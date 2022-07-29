@@ -23,6 +23,10 @@ class RoomList {
         this.roomList[roomId] = { ...this.roomList[roomId], [socketId] : {playerName, status:'', choice:''} };
     }
 
+    getPlayer (roomId, socketId) {
+        return this.roomList[roomId][socketId];
+    }
+
     getPlayers (roomId) {
         return Object.values(this.roomList[roomId]);
     }

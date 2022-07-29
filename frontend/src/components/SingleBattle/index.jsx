@@ -8,7 +8,7 @@ import ResultMessage from "../ResultMessage";
 import { GameResultGrid, StyledTypography } from "./style";
 
 const SingleBattle = () => {
-  const { result, counter } = useContext(GameContext);
+  const { result, gameTimer } = useContext(GameContext);
 
   return (
     <Grid container sx={{ margin: "auto", paddingTop: "7%", position: "relative" }}>
@@ -24,7 +24,7 @@ const SingleBattle = () => {
       </Grid>
 
       <GameResultGrid item xs={8} sm={3} md={2}>
-        {counter === 0
+        {gameTimer === 0
       && (
         <ResultMessage />
       )}
@@ -35,9 +35,9 @@ const SingleBattle = () => {
           <StyledTypography variant="h2" color="textPrimary" sx={{ textTransform: "uppercase" }}>The House Picked</StyledTypography>
         </Box>
         <Box sx={{ height: "fit-content", marginTop: "10px" }}>
-          {counter === 0
-            ? <ChoiceButton choice={result.computer} timeout={counter} isPlayer={false} />
-            : <GameItemContainer timer={counter} />}
+          {gameTimer === 0
+            ? <ChoiceButton choice={result.computer} timeout={gameTimer} isPlayer={false} />
+            : <GameItemContainer timer={gameTimer} />}
         </Box>
       </Grid>
     </Grid>

@@ -8,7 +8,7 @@ import ResultMessage from "../ResultMessage";
 import { GameResultGrid, StyledTypography } from "./style";
 
 const MultiBattle = () => {
-  const { multiBattleResult, counter, players } = useContext(GameContext);
+  const { multiBattleResult, gameTimer, players } = useContext(GameContext);
 
   const Oponents = () => players.map((i) => {
     return (
@@ -17,9 +17,9 @@ const MultiBattle = () => {
           <StyledTypography variant="h2" color="textPrimary" sx={{ textTransform: "uppercase" }}>The House Picked</StyledTypography>
         </Box>
         <Box sx={{ height: "fit-content", marginTop: "10px" }}>
-          {counter === 0
-            ? <ChoiceButton choice="ROCK" timeout={counter} isPlayer={false} />
-            : <GameItemContainer timer={counter} />}
+          {gameTimer === 0
+            ? <ChoiceButton choice="ROCK" timeout={gameTimer} isPlayer={false} />
+            : <GameItemContainer timer={gameTimer} />}
         </Box>
       </Grid>
     );
@@ -39,7 +39,7 @@ const MultiBattle = () => {
       </Grid>
 
       <GameResultGrid item xs={8} sm={3} md={2}>
-        {counter === 0
+        {gameTimer === 0
       && (
         <ResultMessage />
       )}

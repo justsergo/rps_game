@@ -20,7 +20,7 @@ const GameContextProvider = ({ children }) => {
 
   const [userName, setUserName] = useState("");
 
-  const [players, setPlayers] = useState([{ user: userName, status: "" }]);
+  const [players, setPlayers] = useState([{ user: userName, status: "", choice: "" }]);
 
   const [result, setResultBattle] = useState({
     conclusion: "",
@@ -102,9 +102,17 @@ const GameContextProvider = ({ children }) => {
     [isBattle],
   );
 
+  // TODO: remove when create and join methods will be done
+  // useEffect(() => {
+  //   socket.emit("create-room", { roomId: rooms.currentRoom, playerName: "ex" });
+  //   return () => socket.emit("leave-room", { roomId: rooms.currentRoom });
+  // }, []);
+  //
+
+  // TODO: toggle battle wil be work, when all plaiers status done
   const emitMultiUserChoice = useCallback(({ playerChoice }) => {
     socket.emit("choice", { choice: playerChoice, roomId: rooms.currentRoom });
-    toggleBattle({ ...isBattle, multi: true });
+    // toggleBattle({ ...isBattle, multi: true });
   }, [isBattle, rooms.currentRoom]);
 
   const createSingleRoom = () => {
@@ -128,13 +136,22 @@ const GameContextProvider = ({ children }) => {
     setRooms({ ...rooms, availableRooms: newRooms });
   });
 
+  // TODO: set choice result by nick name
+
+  socket.on("choice-result", (playersResult) => {
+    setPlayers(
+      [
+        ...players,
+        ...playersResult,
+      ],
+    );
+  });
+
   socket.on("created", (roomId) => { setRooms({ ...rooms, currentRoom: roomId }); });
 
   socket.on("joined", (playerNames) => { setPlayers(...players, playerNames); });
 
   socket.on("leaved", (playerName) => { setPlayers(...players, playerName); });
-
-  socket.on("choice-result", (choice) => { setMultiBattleResult({ user: choice[socket.id].choice }); });
 
   const contextValue = useMemo(() => ({
     leaveSingleRoom,
@@ -144,7 +161,7 @@ const GameContextProvider = ({ children }) => {
     result,
     messageOptions,
     score,
-    counter: gameTimer,
+    gameTimer,
     rooms,
     players,
     emitMultiUserChoice,

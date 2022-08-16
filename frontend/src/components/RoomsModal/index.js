@@ -1,7 +1,8 @@
 import {
   Tab, Tabs,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import ModalWrapper from "../Modal";
 import TabPanel from "../TabPanel";
@@ -10,10 +11,20 @@ import JoinRoom from "./JoinRoom";
 
 const RoomsModalContainer = ({ isOpen, close }) => {
   const [selectedTab, setSelectedTab] = useState(0);
-
+  const [username, setUsername] = useState({});
+  const navigate = useNavigate();
   const handleChange = (event, newTab) => {
     setSelectedTab(newTab);
   };
+  const getUser = () => localStorage.getItem("username");
+
+  useEffect(() => {
+    setUsername(() => getUser());
+  }, []);
+
+  if (!username) {
+    navigate("/auth");
+  }
 
   return (
     <ModalWrapper isOpen={isOpen} close={close} width="35%" height="35%" smWidth="90%" smHeight="50%">

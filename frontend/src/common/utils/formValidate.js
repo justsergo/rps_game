@@ -36,3 +36,21 @@ export const signInValidate = (values) => {
   }
   return errors;
 };
+
+export const createRoomValidate = (values) => {
+  const errors = {};
+  if (!values.createRoomName) {
+    errors.createRoomName = "Field is required";
+  } else if (values.createRoomName.length > 15) {
+    errors.createRoomName = "Cannot be more than 15 characters";
+  }
+  return errors;
+};
+
+export const joinRoomValidate = (values) => {
+  const errors = {};
+  if (!values.joinRoom) {
+    errors.joinRoom = "Field is required";
+  }
+  return errors;
+};

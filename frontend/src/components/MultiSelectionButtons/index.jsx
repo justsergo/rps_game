@@ -2,30 +2,35 @@ import { Grid } from "@mui/material";
 import { useContext } from "react";
 
 import { GameContext } from "../../services/gameContext";
+import { RequestSnackbar } from "../Snackbars/RequestSnackbar";
 import Triangle from "../Triangle";
 import UserInfoBlock from "../UserBattleInfo";
 
 const MultiSelectionButtons = () => {
-  const { emitMultiUserChoice } = useContext(GameContext);
+  const { emitMultiUserChoice, successRoomMessage } = useContext(GameContext);
 
   const iconEvent = (e) => {
     emitMultiUserChoice({ playerChoice: e.currentTarget.id });
   };
+
   return (
-    <Grid container height="100%">
+    <>
+      <Grid container height="100%">
 
-      <UserInfoBlock />
+        <UserInfoBlock />
 
-      <Grid
-        container
-        sx={{
-          flexDirection: "column", flexWrap: "nowrap", justifyContent: "flex-start", alignItems: "center", height: "100%",
-        }}
-      >
-        <Triangle onClick={iconEvent} />
+        <Grid
+          container
+          sx={{
+            flexDirection: "column", flexWrap: "nowrap", justifyContent: "flex-start", alignItems: "center", height: "100%",
+          }}
+        >
+          <Triangle onClick={iconEvent} />
+        </Grid>
+
       </Grid>
-
-    </Grid>
+      <RequestSnackbar success={successRoomMessage} />
+    </>
   );
 };
 

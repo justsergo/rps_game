@@ -1,6 +1,7 @@
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Link } from "@mui/material";
 import { useFormik } from "formik";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { signUpSubmitHandler } from "../../../api/authApi";
 import { helperText, isError } from "../../../common/utils/formTextHelper";
@@ -8,12 +9,16 @@ import { signUpValidate } from "../../../common/utils/formValidate";
 import { resetFormCallback } from "../../../common/utils/resetForm";
 import { TEXT_FIELD_NAMES } from "../../../constants/names";
 import { TEXT_FIELD_TYPES } from "../../../constants/types";
+import style from "../../../pages/StartPage/styles";
 import MuiTextField from "../../MuiTextField";
 import { RequestSnackbar } from "../../Snackbars/RequestSnackbar";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [errorRequest, setErrorRequest] = useState(null);
   const [successRequest, setSuccessRequest] = useState(null);
+
+  const toMain = () => navigate("/");
 
   const resetForm = () => resetFormCallback(formik);
 
@@ -89,6 +94,18 @@ const SignUp = () => {
 
           <Grid item xs={9} sx={{ margin: { xs: "40px auto auto auto", sm: "60px auto auto auto" } }}>
             <Button type="submit" variant="contained" sx={{ padding: "10px 30px" }}>Sign Up</Button>
+          </Grid>
+
+          <Grid item xs={9} sx={{ margin: "20px auto auto auto" }}>
+            <Link
+              component="button"
+              variant="body2"
+              color="textSecondary"
+              onClick={toMain}
+              sx={style.menu}
+            >
+              GO TO MAIN
+            </Link>
           </Grid>
         </Grid>
       </form>

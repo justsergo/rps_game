@@ -1,5 +1,5 @@
 import {
-  Button, Grid, Typography,
+  Button, Grid, Link, Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
 import { useState } from "react";
@@ -11,6 +11,7 @@ import { signInValidate } from "../../../common/utils/formValidate";
 import { resetFormCallback } from "../../../common/utils/resetForm";
 import { TEXT_FIELD_NAMES } from "../../../constants/names";
 import { TEXT_FIELD_TYPES } from "../../../constants/types";
+import style from "../../../pages/StartPage/styles";
 import MuiTextField from "../../MuiTextField";
 import { RequestSnackbar } from "../../Snackbars/RequestSnackbar";
 
@@ -19,11 +20,13 @@ const SignIn = () => {
   const [errorRequest, setErrorRequest] = useState(null);
   const [successRequest, setSuccessRequest] = useState(null);
 
+  const toMain = () => navigate("/");
+
   const resetForm = () => resetFormCallback(formik);
 
   const redirectHandle = (navigateTo) => setTimeout(() => {
     navigate(navigateTo);
-  }, 3000);
+  }, 2000);
 
   const formik = useFormik({
     initialValues: {
@@ -83,6 +86,18 @@ const SignIn = () => {
           <Grid item xs={9} sx={{ margin: "5% auto auto auto", alignSelf: "flex-end" }}>
             <Typography variant="body2" color="textSecondary">Don't have an Account?</Typography>
             <Typography variant="body2" color="textSecondary">Please use Sign Up</Typography>
+          </Grid>
+
+          <Grid item xs={9} sx={{ margin: "20px auto auto auto" }}>
+            <Link
+              component="button"
+              variant="body2"
+              color="textSecondary"
+              onClick={toMain}
+              sx={style.menu}
+            >
+              GO TO MAIN
+            </Link>
           </Grid>
         </Grid>
       </form>

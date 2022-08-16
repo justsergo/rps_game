@@ -1,6 +1,6 @@
 import {
   Button,
-  Grid, Link, Popover, Typography,
+  Grid, Link, Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -15,8 +15,6 @@ import style, {
 
 const StartPage = () => {
   const navigate = useNavigate();
-
-  const [anchorEl, setAnchorEl] = useState(null);
   const [modal, setModal] = useState(false);
 
   const toPlay = () => navigate("game");
@@ -25,16 +23,9 @@ const StartPage = () => {
   const openModal = () => setModal(true);
   const closeModal = () => setModal(false);
 
-  // const openPopup = (event) => setAnchorEl(event.currentTarget);
-  const openPopup = () => navigate("game/multi");
-  const closePopup = () => setAnchorEl(null);
-
-  const isOpen = Boolean(anchorEl);
-  const id = isOpen ? "simple-popover" : undefined;
-
   const [openRoomsModal, setOpenRoomsModal] = useState(false);
-  const roomsModal = () => setOpenRoomsModal(true);
   const closeRoomsModal = () => setOpenRoomsModal(false);
+  const toRoomsModal = () => setOpenRoomsModal(true);
 
   return (
     <StyledGrid container item xs={10}>
@@ -65,29 +56,13 @@ const StartPage = () => {
             component="button"
             variant="h1"
             color="textPrimary"
-            aria-describedby={id}
-            onClick={openPopup}
+            onClick={toRoomsModal}
             sx={style.menu}
           >
             MULTIPLAYER
           </Link>
-          <Popover
-            id={id}
-            open={isOpen}
-            anchorEl={anchorEl}
-            onClose={closePopup}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "left",
-            }}
-          >
-            <Typography
-              variant="body1"
-              color="textSecondary"
-              sx={style.popoverText}
-            >Coming soon...
-            </Typography>
-          </Popover>
+
+          {openRoomsModal && <RoomsModalContainer isOpen={openRoomsModal} close={closeRoomsModal} />}
         </Grid>
 
         <Grid item>
@@ -95,19 +70,12 @@ const StartPage = () => {
             component="button"
             variant="body1"
             color="textPrimary"
-            aria-describedby={id}
             onClick={toAuth}
             sx={style.authLink}
           >
             AUTHENTICATION
           </Link>
         </Grid>
-
-        <Grid item>
-          <Button variant="outlined" color="common" size="small" onClick={roomsModal}>rooms modal</Button>
-          <RoomsModalContainer isOpen={openRoomsModal} close={closeRoomsModal} />
-        </Grid>
-
       </Grid>
 
       <Grid container flexDirection="column" alignItems="center" spacing={30}>

@@ -20,7 +20,7 @@ const GameContextProvider = ({ children }) => {
   });
   const [userName, setUserName] = useState("");
 
-  const [players, setPlayers] = useState([{ playerName: "", status: "", choice: "" }]);
+  const [players, setPlayers] = useState([{ user: userName, status: "", choice: "" }]);
 
   const [result, setResultBattle] = useState({
     conclusion: "",
@@ -102,9 +102,17 @@ const GameContextProvider = ({ children }) => {
     [isBattle],
   );
 
+  // TODO: remove when create and join methods will be done
+  // useEffect(() => {
+  //   socket.emit("create-room", { roomId: rooms.currentRoom, playerName: "ex" });
+  //   return () => socket.emit("leave-room", { roomId: rooms.currentRoom });
+  // }, []);
+  //
+
+  // TODO: toggle battle wil be work, when all plaiers status done
   const emitMultiUserChoice = useCallback(({ playerChoice }) => {
     socket.emit("choice", { choice: playerChoice, roomId: rooms.currentRoom });
-    toggleBattle({ ...isBattle, multi: true });
+    // toggleBattle({ ...isBattle, multi: true });
   }, [isBattle, rooms.currentRoom]);
 
   const createSingleRoom = () => {
@@ -137,6 +145,18 @@ const GameContextProvider = ({ children }) => {
     socket.emit("join-room", { roomId, playerName: userName });
     setRooms({ ...rooms, currentRoom: roomId });
     if (redirectHandle) { redirectHandle("game/multiplayer"); }
+    // TODO: set choice result by nick name
+
+    socket.on("choice-result", (playersResult) => {
+      setPlayers(
+        [
+          ...players,
+          ...playersResult,
+        ],
+      );
+    });
+
+    socket.on("created", (roomId) => { setRooms({ ...rooms, currentRoom: roomId }); });
 
     if (resetForm) {
       resetForm();
@@ -172,7 +192,7 @@ const GameContextProvider = ({ children }) => {
     result,
     messageOptions,
     score,
-    counter: gameTimer,
+    gameTimer,
     rooms,
     players,
     emitMultiUserChoice,

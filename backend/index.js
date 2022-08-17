@@ -66,7 +66,7 @@ io.on("connection", socket => {
 
       socket.join(roomId);
       roomList.addPlayer(roomId, socket.id, playerName);
-      io.to(roomId).emit("joined", roomList.getPlayers(roomId));
+      io.to(roomId).emit("joined", roomList.getPlayer(roomId, socket.id));
       emitAvailableRooms();
     } else {
 
@@ -78,7 +78,7 @@ io.on("connection", socket => {
   socket.on("leave-room",({roomId}) => {
     socket.leave(roomId);
     roomList.removePlayer(roomId, socket.id);
-    io.to(roomId).emit("leaved", roomList.getPlayers(roomId));
+    io.to(roomId).emit("leaved", roomList.getPlayer(roomId, socket.id));
     emitAvailableRooms();
   })
 
@@ -89,11 +89,11 @@ io.on("connection", socket => {
 
   socket.on("choice",({choice, roomId}) => {
     roomList.changeChoice(roomId, socket.id, choice);
-    roomList.changeStatus(roomId, socket.id, 'done');
-    const playerInRoom = roomList.getPlayers(roomId);
-    const notReadyPlayers = Object.values(playerInRoom).filter((item)=>item.status !== 'done');
+    roomList.changeStatus(roomId, socket.id, 'done'); 
+    const playersInRoom = roomList.getRoom(roomId);
+    const notReadyPlayers = Object.values(playersInRoom).filter((item)=>item.status !== 'done');
     if(notReadyPlayers.length === 0) {
-      io.to(roomId).emit("choice-result", getRoom(roomId));
+      io.to(roomId).emit("choice-result", roomList.getPlayers(roomId));
       roomList.changeChoice(roomId, socket.id, '');
     }
   });

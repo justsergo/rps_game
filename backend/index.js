@@ -99,16 +99,21 @@ io.on("connection", socket => {
     roomList.changeChoice(roomId, socket.id, choice);
     roomList.changeStatus(roomId, socket.id, 'done');
     const playersInRoom = roomList.getRoom(roomId);
-    const notReadyPlayers = Object.values(playersInRoom).filter((item)=>item.status !== 'done');
+    const notReadyPlayers = Object.values(playersInRoom).filter((item)=>item.status !== 'ready');
     if(notReadyPlayers.length === 0) {
       io.to(roomId).emit("choice-result", roomList.getPlayers(roomId));
       roomList.changeChoice(roomId, socket.id, '');
     }
   });
 
-  socket.on("status",({status, roomId}) => {
-    roomList.changeStatus(roomId, socket.id, status);
-    io.to(roomId).emit("status-result", roomList.getRoom(roomId));
+  socket.on("change-status",({status, roomId, playerId }) => {
+    roomList.changeStatus(roomId, playerId, status);
+    const playersInRoom = roomList.getPlayers(roomId)
+    io.to(roomId).emit("status-result", playersInRoom);
+    const notReadyPlayers = playersInRoom.filter((item)=>item.status !== 'ready');
+    if(notReadyPlayers.length === 0) {
+      io.to(roomId).emit("status-ready", roomList.getPlayers(roomId));
+    }
   });
 
   socket.on("multi-battle", ({playerChoices, roomId})=>{

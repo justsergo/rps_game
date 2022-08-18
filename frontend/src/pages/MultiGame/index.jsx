@@ -1,14 +1,12 @@
-import { useContext } from "react";
-
-import MultiBattle from "../../components/MultiBattle";
-import MultiSelectionButtons from "../../components/MultiSelectionButtons";
-import { GameContext } from "../../services/gameContext";
+import PrepareBattle from "../../components/MultiPrepareBattle";
 
 const MultiGame = () => {
-  const { isBattle } = useContext(GameContext);
-  if (isBattle.multi) {
-    return <MultiBattle />;
-  }
-  return <MultiSelectionButtons />;
+  // TODO: make logic battle will backend will be done
+
+  // const { isBattle } = useContext(GameContext);
+  // if (isBattle.multi) {
+  //   return <MultiBattle />;
+  // }
+  return <PrepareBattle />;
 };
 export default MultiGame;

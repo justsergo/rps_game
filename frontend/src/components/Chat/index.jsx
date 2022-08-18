@@ -21,8 +21,10 @@ const RenderChatMessages = ({ chat, nickName }) => {
   ));
 };
 
-const Chat = ({ isOpen, onClose }) => {
-  const { socket, userName } = useContext(GameContext);
+const Chat = () => {
+  const {
+    socket, userName, isOpenChat, toggleChat,
+  } = useContext(GameContext);
   const [messages, setMessages] = useState({ message: "", name: "" });
   const [chat, setChat] = useState([]);
 
@@ -61,11 +63,12 @@ const Chat = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Slide in={isOpen} direction="up" timeout={500}>
+    <Slide in={isOpenChat} direction="up" timeout={500}>
+
       <FormChat onSubmit={onMessageSubmit}>
 
         <Button
-          onClick={onClose}
+          onClick={() => toggleChat()}
           sx={{
             zIndex: "2", position: "absolute", right: "0", top: "0",
           }}
@@ -95,6 +98,7 @@ const Chat = ({ isOpen, onClose }) => {
         </InsertZone>
 
       </FormChat>
+
     </Slide>
   );
 };

@@ -1,6 +1,7 @@
 import { useContext } from "react";
 
 import { GameContext } from "../../services/gameContext";
+import ChatBar from "../ChatBar";
 import {
   ScoreGridContainer, ScoreText, ScoreValue, StyledGrid, Text, TextGridContainer,
 } from "./styles";
@@ -21,6 +22,7 @@ const Header = () => {
           {score}
         </ScoreValue>
       </ScoreGridContainer>
+      <ChatBar />
     </StyledGrid>
   );
 };

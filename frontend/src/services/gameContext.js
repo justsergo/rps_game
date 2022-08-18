@@ -102,13 +102,6 @@ const GameContextProvider = ({ children }) => {
     [isBattle],
   );
 
-  // TODO: remove when create and join methods will be done
-  // useEffect(() => {
-  //   socket.emit("create-room", { roomId: rooms.currentRoom, playerName: "ex" });
-  //   return () => socket.emit("leave-room", { roomId: rooms.currentRoom });
-  // }, []);
-  //
-
   // TODO: toggle battle wil be work, when all plaiers status done
   const emitMultiUserChoice = useCallback(({ playerChoice }) => {
     socket.emit("choice", { choice: playerChoice, roomId: rooms.currentRoom });
@@ -151,12 +144,10 @@ const GameContextProvider = ({ children }) => {
       setPlayers(
         [
           ...players,
-          ...playersResult,
+          playersResult,
         ],
       );
     });
-
-    socket.on("created", (roomId) => { setRooms({ ...rooms, currentRoom: roomId }); });
 
     if (resetForm) {
       resetForm();

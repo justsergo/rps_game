@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
-import Footer from "../Footer";
 import Header from "../Header";
 import { StyledContainer } from "./styles";
 
@@ -12,13 +11,10 @@ const Layout = () => {
         <Header />
       </Box>
 
-      <Box component="div" sx={{ height: "65%" }}>
+      <Box component="div" sx={{ height: "85%" }}>
         <Outlet />
       </Box>
 
-      <Box component="div" sx={{ height: "20%" }}>
-        <Footer />
-      </Box>
     </StyledContainer>
   );
 };

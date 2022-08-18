@@ -20,7 +20,16 @@ const GameContextProvider = ({ children }) => {
   });
   const [userName, setUserName] = useState("");
 
-  const [players, setPlayers] = useState([{ user: userName, status: "", choice: "" }]);
+  const [players, setPlayers] = useState([
+    { user: `${userName}gr`, status: "1", choice: "" },
+    { user: "49", status: "", choice: "" },
+    { user: "Я ЕБ", status: "", choice: "" },
+    { user: "3", status: "", choice: "" },
+    { user: "4dsfdsfsdf ", status: "", choice: "" },
+    { user: "5", status: "", choice: "" },
+  ]);
+
+  console.log(userName);
 
   const [result, setResultBattle] = useState({
     conclusion: "",
@@ -104,6 +113,12 @@ const GameContextProvider = ({ children }) => {
 
   // TODO: toggle battle wil be work, when all plaiers status done
   const emitMultiUserChoice = useCallback(({ playerChoice }) => {
+    socket.emit("choice", { choice: playerChoice, roomId: rooms.currentRoom });
+    // toggleBattle({ ...isBattle, multi: true });
+  }, [isBattle, rooms.currentRoom]);
+
+  // TODO: not ready method
+  const emitChangeStatus = useCallback(({ playerChoice }) => {
     socket.emit("choice", { choice: playerChoice, roomId: rooms.currentRoom });
     // toggleBattle({ ...isBattle, multi: true });
   }, [isBattle, rooms.currentRoom]);
@@ -196,6 +211,7 @@ const GameContextProvider = ({ children }) => {
     successRoomMessage,
     setSuccessRoomMessage,
     backToChoice,
+    emitChangeStatus,
   }), [
     getAllRooms,
     result,
@@ -213,6 +229,7 @@ const GameContextProvider = ({ children }) => {
     emitSingleUserChoice,
     leaveRoom,
     rooms,
+    emitChangeStatus,
   ]);
 
   return (

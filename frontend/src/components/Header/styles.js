@@ -9,6 +9,7 @@ export const StyledGrid = styled(Grid)`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 `;
 
 export const TextGridContainer = styled(Grid)`

@@ -31,6 +31,14 @@ const typography = {
     lineHeight: "1rem",
     color: "white",
   },
+  playerTittle: {
+    fontStyle: "normal",
+    fontSize: "1.5rem",
+    fontWeight: 600,
+    lineHeight: "0.5rem",
+    color: "white",
+    filter: "drop-shadow(0px 0px 8px #ffffff)",
+  },
   body1: {
     fontStyle: "normal",
     fontWeight: 600,

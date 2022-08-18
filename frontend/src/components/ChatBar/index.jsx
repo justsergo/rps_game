@@ -10,7 +10,7 @@ import { GameContext } from "../../services/gameContext";
 import Chat from "../Chat";
 import { Wrapper } from "./styles";
 
-const Footer = () => {
+const ChatBar = () => {
   // TODO chat visible only on multi battle
   const [isOpen, toggleChat] = useState(false);
   const { leaveRoom } = useContext(GameContext);
@@ -26,7 +26,7 @@ const Footer = () => {
 
       <Slide in={!isOpen} direction="up" timeout={400}>
 
-        <Grid item sx={{ paddingBottom: "10px" }}>
+        <Grid container sx={{ paddingBottom: "10px", flexDirection: "column" }}>
           <Button onClick={backToMain}>
             <MenuOpenIcon color="info" fontSize="medium" />
           </Button>
@@ -41,4 +41,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default ChatBar;

@@ -63,6 +63,36 @@ const createComponents = (palette) => ({
       },
 
       {
+        props: { variant: "iconWrapXS" },
+        style: {
+          width: "6rem",
+          height: "6rem",
+          borderRadius: "50%",
+          backgroundColor: palette.button.background,
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          boxShadow: "0 0.7rem 0 -0.3rem #c7b7ba inset",
+          boxSizing: "border-box",
+          padding: 0,
+          position: "relative",
+          "&:hover": {
+            backgroundColor: palette.button.background,
+          },
+          "&::before": {
+            content: "\"\"",
+            borderRadius: "50%",
+            position: "absolute",
+            boxShadow: "0 -0.15rem 0 0.1rem rgba(0, 0, 0, 0.4) inset",
+            display: "block",
+            width: "8rem",
+            height: "8rem",
+            zIndex: -1,
+          },
+        },
+      },
+
+      {
         props: { variant: "iconWrapXl" },
         style: {
           width: "10rem",

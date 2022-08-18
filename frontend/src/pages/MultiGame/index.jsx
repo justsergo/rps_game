@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
 import MultiBattle from "../../components/MultiBattle";
-import MultiSelectionButtons from "../../components/MultiSelectionButtons";
+import UsersChoice from "../../components/MultiUserChoice";
 import { GameContext } from "../../services/gameContext";
 
 const MultiGame = () => {
@@ -9,6 +9,6 @@ const MultiGame = () => {
   if (isBattle.multi) {
     return <MultiBattle />;
   }
-  return <MultiSelectionButtons />;
+  return <UsersChoice />;
 };
 export default MultiGame;

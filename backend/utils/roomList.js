@@ -19,28 +19,28 @@ class RoomList {
         delete this.roomList[roomId];
     }
 
-    addPlayer (roomId, socketId, playerName) {
-        this.roomList[roomId] = { ...this.roomList[roomId], [socketId] : {playerName, status:'', choice:''} };
+    addPlayer (roomId, playerName, playerId) {
+        this.roomList[roomId] = { ...this.roomList[roomId], [playerId] : {playerName, status:'', choice:''} };
     }
 
-    getPlayer (roomId, socketId) {
-        return this.roomList[roomId][socketId];
+    getPlayer (roomId, playerId) {
+        return this.roomList[roomId][playerId];
     }
 
     getPlayers (roomId) {
         return Object.values(this.roomList[roomId]);
     }
 
-    removePlayer (roomId, socketId) {
-        delete this.roomList[roomId][socketId];
+    removePlayer (roomId, playerId) {
+        delete this.roomList[roomId][playerId];
     }
 
-    changeStatus (roomId, socketId, status) {
-        this.roomList[roomId][socketId] = { ...this.roomList[roomId][socketId], status };
+    changeStatus (roomId, playerId, status) {
+        this.roomList[roomId][playerId] = { ...this.roomList[roomId][playerId], status };
     }
 
-    changeChoice (roomId, socketId, choice) {
-        this.roomList[roomId][socketId] = { ...this.roomList[roomId][socketId], choice };
+    changeChoice (roomId, playerId, choice) {
+        this.roomList[roomId][playerId] = { ...this.roomList[roomId][playerId], choice };
     }
 }
 

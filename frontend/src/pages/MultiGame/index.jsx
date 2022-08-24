@@ -3,8 +3,8 @@ import PrepareBattle from "../../components/MultiPrepareBattle";
 const MultiGame = () => {
   // TODO: make logic battle will backend will be done
 
-  // const { isBattle } = useContext(GameContext);
-  // if (isBattle.multi) {
+  // const { battle } = useContext(GameContext);
+  // if (battle.multi) {
   //   return <MultiBattle />;
   // }
   return <PrepareBattle />;

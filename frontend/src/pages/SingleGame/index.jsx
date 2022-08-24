@@ -5,12 +5,12 @@ import SingleBattle from "../../components/SingleBattle";
 import { GameContext } from "../../services/gameContext";
 
 const SingleGame = () => {
-  const { isBattle, leaveSingleRoom, createSingleRoom } = useContext(GameContext);
+  const { battle, leaveSingleRoom, createSingleRoom } = useContext(GameContext);
   useEffect(() => {
     createSingleRoom();
     return () => leaveSingleRoom();
   }, []);
-  if (isBattle.single) {
+  if (battle.single) {
     return <SingleBattle />;
   }
   return <SelectionButtons />;

@@ -47,37 +47,45 @@ const emitAvailableRooms = () => {
 
 io.on("connection", socket => {
 
+  socket.on('reconnect',(userId = '')=>{
+    const availableRooms = Object.entries(roomList.getAllRooms());
+    if( availableRooms.length !== 0) {
+      const [roomName] = availableRooms.find(([_,obj]) => obj[userId]);
+      const players = roomList.getPlayers(roomName)
+      io.emit('reconnect-room', roomName, players)
+    }
+  })
+
   socket.on("get-rooms", () => {
     emitAvailableRooms();
     })
 
-  socket.on("create-room", ({roomId, playerName}) => {
+  socket.on("create-room", ({roomId, playerName, playerId}) => {
     socket.join(roomId);
     roomList.addRoom(roomId);
-    roomList.addPlayer(roomId, socket.id, playerName);
-    io.to(roomId).emit("created", roomId);
+    roomList.addPlayer(roomId, playerName, playerId);
+    io.to(roomId).emit("created", roomList.getPlayers(roomId));
     io.to(roomId).emit("created-message", `Room "${roomId}" was created`);
     emitAvailableRooms();
   });
 
-  socket.on("join-room", ({roomId, playerName}) => {
+  socket.on("join-room", ({roomId, playerName, playerId}) => {
     const keysRoom = Object.keys(roomList.getRoom(roomId));
     if (keysRoom.length < 3) {
 
       socket.join(roomId);
-      roomList.addPlayer(roomId, socket.id, playerName);
+      roomList.addPlayer(roomId, playerName, playerId);
       io.to(roomId).emit("joined", roomList.getPlayers(roomId));
       emitAvailableRooms();
     } else {
 
       io.to(roomId).emit("joined", `${roomId} already exist`);
-
     }
   });
 
-  socket.on("leave-room",({roomId}) => {
+  socket.on("leave-room",({roomId, playerId}) => {
     socket.leave(roomId);
-    roomList.removePlayer(roomId, socket.id);
+    roomList.removePlayer(roomId,  playerId);
     io.to(roomId).emit("leaved", roomList.getPlayers(roomId));
     emitAvailableRooms();
   })

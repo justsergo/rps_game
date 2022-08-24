@@ -21,7 +21,8 @@ export const signInSubmitHandler = async (
     const res = await authAPI.signIn(data.username, data.password);
     if (res.data.username) {
       setSuccessRequest(`${res.data.username} login successful`);
-      localStorage.setItem("username", JSON.stringify(res.data.username));
+      // eslint-disable-next-line no-underscore-dangle
+      localStorage.setItem("user", JSON.stringify({ username: res.data.username, id: res.data._id }));
       redirectHandle("/");
     } else setErrorRequest(res.data);
   } catch (error) {

@@ -4,6 +4,7 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { getUserName } from "../../common/utils/localstorageGetItems";
 import ModalWrapper from "../Modal";
 import TabPanel from "../TabPanel";
 import CreateRoom from "./CreateRoom";
@@ -16,10 +17,9 @@ const RoomsModalContainer = ({ isOpen, close }) => {
   const handleChange = (event, newTab) => {
     setSelectedTab(newTab);
   };
-  const getUser = () => localStorage.getItem("username");
 
   useEffect(() => {
-    setUsername(() => getUser());
+    setUsername(() => getUserName());
   }, []);
 
   if (!username) {

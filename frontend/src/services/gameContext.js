@@ -1,7 +1,9 @@
 import {
-  createContext, useCallback, useEffect, useMemo, useState,
+  createContext, useCallback, useEffect, useLayoutEffect, useMemo, useState,
 } from "react";
 import { io } from "socket.io-client";
+
+import { getUserId, getUserName } from "../common/utils/localstorageGetItems";
 
 export const GameContext = createContext(null);
 
@@ -18,9 +20,10 @@ const GameContextProvider = ({ children }) => {
     availableRooms: [],
     currentRoom: "",
   });
+
   const [userName, setUserName] = useState("");
 
-  const [players, setPlayers] = useState([{ user: userName, status: "", choice: "" }]);
+  const [players, setPlayers] = useState([{ playerName: userName, status: "", choice: "" }]);
 
   const [result, setResultBattle] = useState({
     conclusion: "",
@@ -40,8 +43,14 @@ const GameContextProvider = ({ children }) => {
 
   const [gameTimer, setGameTimer] = useState(3);
 
+  const id = getUserId();
+
+  useLayoutEffect(() => {
+    socket.emit("reconnect", (id));
+  }, []);
+
   useEffect(() => {
-    setUserName(localStorage.getItem("username"));
+    setUserName(getUserName);
   }, []);
 
   useEffect(() => {
@@ -102,10 +111,8 @@ const GameContextProvider = ({ children }) => {
     [isBattle],
   );
 
-  // TODO: toggle battle wil be work, when all plaiers status done
   const emitMultiUserChoice = useCallback(({ playerChoice }) => {
     socket.emit("choice", { choice: playerChoice, roomId: rooms.currentRoom });
-    // toggleBattle({ ...isBattle, multi: true });
   }, [isBattle, rooms.currentRoom]);
 
   const createSingleRoom = () => {
@@ -118,15 +125,15 @@ const GameContextProvider = ({ children }) => {
   };
 
   const leaveRoom = useCallback(() => {
-    socket.emit("leave-room", { roomId: rooms.currentRoom });
-  }, [rooms.currentRoom]);
+    socket.emit("leave-room", { roomId: rooms.currentRoom, playerId: id });
+  }, [id, rooms.currentRoom]);
 
   const backToChoice = useCallback(() => {
     toggleBattle({ ...isBattle, single: false });
   }, [isBattle]);
 
   const emitCreateRoom = (roomId, resetForm, redirectHandle) => {
-    socket.emit("create-room", { roomId, playerName: userName });
+    socket.emit("create-room", { roomId, playerName: userName, playerId: id });
     setRooms({ ...rooms, currentRoom: roomId });
     if (redirectHandle) { redirectHandle("game/multiplayer"); }
     if (resetForm) {
@@ -135,7 +142,7 @@ const GameContextProvider = ({ children }) => {
   };
 
   const emitJoinRoom = (roomId, resetForm, redirectHandle) => {
-    socket.emit("join-room", { roomId, playerName: userName });
+    socket.emit("join-room", { roomId, playerName: userName, playerId: id });
     setRooms({ ...rooms, currentRoom: roomId });
     if (redirectHandle) { redirectHandle("game/multiplayer"); }
     // TODO: set choice result by nick name
@@ -165,13 +172,17 @@ const GameContextProvider = ({ children }) => {
   socket.on("available-rooms", (newRooms) => {
     setRooms({ ...rooms, availableRooms: newRooms });
   });
-  socket.on("created", (name) => {
-    setRooms({ ...rooms, currentRoom: name });
-  });
+  socket.on("created", (users) => { setPlayers(users); });
   socket.on("created-message", (name) => { setSuccessRoomMessage(name); });
-  socket.on("joined", (users) => { setPlayers(users); });
+  socket.on("joined", (users) => {
+    setPlayers(users);
+  });
   socket.on("leaved", (users) => { setPlayers(users); });
   socket.on("choice-result", (choice) => { setMultiBattleResult({ user: choice[socket.id].choice }); });
+  socket.on("reconnect-room", (roomName, refreshedPlayers) => {
+    setRooms({ ...rooms, currentRoom: roomName });
+    setPlayers(refreshedPlayers);
+  });
 
   const contextValue = useMemo(() => ({
     emitJoinRoom,

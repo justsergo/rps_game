@@ -31,6 +31,21 @@ const typography = {
     lineHeight: "1rem",
     color: "white",
   },
+  opponentTittle: {
+    fontStyle: "normal",
+    fontSize: "1.5rem",
+    lineHeight: "2rem",
+    letterSpacing: "0.4rem",
+    color: "#ffffff",
+  },
+  playerTittle: {
+    fontStyle: "normal",
+    fontSize: "1.5rem",
+    fontWeight: 600,
+    lineHeight: "0.5rem",
+    color: "white",
+    filter: "drop-shadow(0px 0px 8px #ffffff)",
+  },
   body1: {
     fontStyle: "normal",
     fontWeight: 600,

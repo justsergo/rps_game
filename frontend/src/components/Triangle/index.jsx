@@ -9,14 +9,14 @@ const iconsInfo = [
   { area: "down", id: GAME_ITEMS.SCISSORS },
 ];
 
-const Triangle = ({ onClick }) => {
+const Triangle = ({ onClick, size = "iconWrap" }) => {
   return (
     <IconGridWrap>
       {iconsInfo.map((item) => (
         <IconButton
           key={item.id}
           id={item.id}
-          variant="iconWrap"
+          variant={size}
           figure={item.id}
           onClick={onClick}
           $gridArea={item.area}

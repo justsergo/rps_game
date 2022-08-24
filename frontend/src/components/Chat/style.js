@@ -29,8 +29,10 @@ export const ChatMessages = styled(Grid)`
 export const FormChat = styled.form`
   width: 50%;  
   height: 300px;
-  position: absolute;
+  position: fixed;
   bottom: 0;
+  left: 25%;
+  z-index: 2;
   @media (max-width: 450px) {
     height: 200px;
     width: 70%; 

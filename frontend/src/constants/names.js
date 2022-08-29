@@ -14,3 +14,12 @@ export const TEXT_FIELD_NAMES = {
 export const AUTOCOMPLETE = {
   JOIN_ROOM: "joinRoom",
 };
+
+export const RESPONSE_USER_STATUS = {
+  READY: "user-ready",
+};
+
+export const USER_STATUS_TEXT = {
+  READY: "READY",
+  WAITING: "WAITING",
+};

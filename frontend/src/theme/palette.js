@@ -18,6 +18,8 @@ const palette = {
     rockGradient: "hsl(349, 71%, 52%)",
     scissorsGradient: "hsl(39, 89%, 49%)",
     lizardGradient: "hsl(261, 73%, 60%)",
+    waitingGradient: "hsla(349,71%,52%,0.8)",
+    readyGradient: "hsla(230,89%,62%,0.83)",
   },
 
   background: {

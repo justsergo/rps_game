@@ -1,5 +1,3 @@
-import { Typography } from "@mui/material";
-
 import {
   StyledAutocomplete, StyledBox, StyledTextField,
 } from "./styles";
@@ -25,7 +23,7 @@ const MuiAutocomplete = ({
             label="Enter room name"
             error={isError}
             fullWidth
-            helperText={<Typography sx={{ position: "absolute" }} variant="body2">{helperText}</Typography>}
+            helperText={helperText}
           />
         )}
         noOptionsText="Room not found"

@@ -22,12 +22,14 @@ const RoomsModalContainer = ({ isOpen, close }) => {
     setUsername(() => getUserName());
   }, []);
 
-  if (!username) {
-    navigate("/auth");
-  }
+  useEffect(() => {
+    if (!username) {
+      navigate("/auth");
+    }
+  }, []);
 
   return (
-    <ModalWrapper isOpen={isOpen} close={close} width="35%" height="35%" smWidth="90%" smHeight="50%">
+    <ModalWrapper isOpen={isOpen} close={close} width="35%" height="35%" smwidth="90%" smheight="50%">
       <Tabs
         value={selectedTab}
         indicatorColor="primary"

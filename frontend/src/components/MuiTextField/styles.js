@@ -12,5 +12,12 @@ export const StyledTextField = styled(TextField)`
       border-width: ${({ theme, error }) => (error && theme.spacing(2))};
     }
   }
-,
+
+  & .MuiFormHelperText-root {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1rem;
+  user-select: none;
+  line-height: 0;
+},
 `;

@@ -14,7 +14,7 @@ export const StyledPaper = styled(Paper)`
   padding: ${({ padding }) => (padding)};
 
   ${({ theme }) => theme.breakpoints.down("sm")} {
-    width: ${({ smWidth }) => (smWidth)};
-    height: ${({ smHeight }) => (smHeight)};
+    width: ${({ smwidth }) => (smwidth)};
+    height: ${({ smheight }) => (smheight)};
   }
 `;

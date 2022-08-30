@@ -13,6 +13,7 @@ const RoutesManager = () => {
     <>
       <Routes>
         <Route path="/" element={<StartPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/auth/:type" element={<Auth />} />
         <Route
           path="auth"

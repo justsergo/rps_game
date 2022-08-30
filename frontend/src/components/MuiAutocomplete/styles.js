@@ -7,6 +7,7 @@ export const StyledAutocomplete = styled(Autocomplete)`
   && input {
     color: ${({ theme }) => theme.palette.text.secondary};
   }
+
 ,
 `;
 
@@ -17,10 +18,17 @@ export const StyledTextField = styled(TextField)`
       border-width: ${({ theme, error }) => (error && theme.spacing(2))};
     }
   }
+
 ,
+& . MuiFormHelperText-root {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1rem;
+  user-select: none;
+  line-height: 0;
+},
 `;
 
 export const StyledBox = styled(Box)`
-  color: ${({ theme }) => theme.palette.text.secondary};
-,
+  color: ${({ theme }) => theme.palette.text.secondary};,
 `;

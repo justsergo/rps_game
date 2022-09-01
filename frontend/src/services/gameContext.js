@@ -15,16 +15,13 @@ const GameContextProvider = ({ children }) => {
   const [successRoomMessage, setSuccessRoomMessage] = useState(null);
 
   const [battle, setBattle] = useState({
-    // TODO: new status for managment sattle state
-    // gameType: "",
-    // gameStatus: "waiting/start/end",
+    roomStatus: "",
+    userStatus: "",
+    battleResult: "",
     single: false,
-    multi: false,
-    users: {
-      isUserReady: false,
-      isAllPlayersReady: false,
-    },
   });
+
+  const gameStatus = useMemo(() => battle.roomStatus, [battle]);
 
   const [rooms, setRooms] = useState({
     availableRooms: [],
@@ -34,19 +31,15 @@ const GameContextProvider = ({ children }) => {
   const [userName, setUserName] = useState("");
 
   const [players, setPlayers] = useState([
-    { playerName: "userName", status: "", choice: "" }, // this user must be first in array
+    {
+      playerName: "userName", status: "", choice: "", userId: "",
+    },
   ]);
 
   const [result, setResultBattle] = useState({
     conclusion: "",
     user: "",
     computer: "",
-  });
-
-  const [multiBattleResult, setMultiBattleResult] = useState({
-    conclusion: "",
-    user: "",
-    oponents: "",
   });
 
   const [messageOptions, setMessageOptions] = useState([]);
@@ -57,13 +50,32 @@ const GameContextProvider = ({ children }) => {
 
   const id = getUserId();
 
+  const thisUser = players.find((user) => user.userId === id) || [id, {
+    playerName: "userName", status: "", choice: "", userId: "",
+  }];
+
+  const filtredPlayers = (users) => {
+    setPlayers(users.sort((a) => { if (a.userId === id) { return -1; } return 0; }));
+  };
+
+  const statuses = {
+    startBattle: "start",
+    readyCheck: "ready-check",
+    makeChoice: "make-choice",
+    battle: "battle",
+    battleFall: "battle-fall", // метод  когда батл не состоялся, например по истечению времени готов 1 юзер или никто не сделал выбор
+    userFall: "user-fall", // метод когда юзер в комнате но не участвует в игре, например не нажал готов или не сделал выбор
+  };
+
   useLayoutEffect(() => {
-    socket.emit("reconnect", (id));
-  }, []);
+    socket.emit("reconnect", ({ userId: id }));
+  }, [id]);
 
   useEffect(() => {
     setUserName(getUserName);
   }, []);
+
+  // single game
 
   useEffect(() => {
     if (result.conclusion === result.user && !gameTimer) {
@@ -104,24 +116,6 @@ const GameContextProvider = ({ children }) => {
     return () => socket.off("single-battle-result");
   }, []);
 
-  useEffect(() => {
-    socket.on("multi-battle-result", (res) => {
-      setMultiBattleResult({
-        conclusion: res.conclusion,
-        oponents: res.oponents,
-        user: res.user,
-      });
-    });
-    return () => socket.off("multi-battle-result");
-  }, []);
-
-  useEffect(() => {
-    const notReadyPlayers = players.filter((item) => item.status !== "ready");
-    if (notReadyPlayers.length === 0) {
-      setBattle({ ...battle, users: { isAllPlayersReady: true } });
-    }
-  }, [players]);
-
   const emitSingleUserChoice = useCallback(
     ({ playerChoice }) => {
       socket.emit("single-battle", { playerChoices: playerChoice, roomId: socket.id });
@@ -130,30 +124,36 @@ const GameContextProvider = ({ children }) => {
     [battle],
   );
 
-  const emitMultiUserChoice = useCallback(({ playerChoice }) => {
-    socket.emit("choice", { choice: playerChoice, roomId: rooms.currentRoom });
-  }, [battle, rooms.currentRoom]);
-
-  const emitChangeStatus = useCallback(() => {
-    socket.emit("change-status", { status: "ready", roomId: rooms.currentRoom, playerId: id });
-  }, [rooms.currentRoom]);
-
   const createSingleRoom = () => {
-    socket.emit("create-room", { roomId: socket.id, playerName: socket.id });
-    socket.emit("join-room", { roomId: socket.id, playerName: socket.id });
+    socket.emit("create-room", { roomId: id, playerName: id, playerId: id });
+    socket.emit("join-room", { roomId: id, playerName: id, playerId: id });
   };
 
   const leaveSingleRoom = () => {
-    socket.emit("leave-room", { roomId: socket.id });
+    socket.emit("leave-room", { roomId: id, playerId: id });
   };
-
-  const leaveRoom = useCallback(() => {
-    socket.emit("leave-room", { roomId: rooms.currentRoom, playerId: id });
-  }, [id, rooms.currentRoom]);
 
   const backToChoice = useCallback(() => {
     setBattle({ ...battle, single: false });
   }, [battle]);
+
+  // multi game
+
+  const emitStartBattle = useCallback(() => {
+    socket.emit("start-battle", { roomId: rooms.currentRoom });
+  }, [rooms.currentRoom]);
+
+  const emitMultiUserChoice = useCallback(({ playerChoice }) => {
+    socket.emit("change-user-choice", { choice: playerChoice, roomId: rooms.currentRoom, playerId: id });
+  }, [rooms.currentRoom, id]);
+
+  const emitChangeStatus = useCallback(() => {
+    socket.emit("change-user-status", { status: "user-ready", roomId: rooms.currentRoom, playerId: id });
+  }, [rooms.currentRoom, id]);
+
+  const emitLeaveRoom = useCallback(() => {
+    socket.emit("leave-room", { roomId: rooms.currentRoom, playerId: id });
+  }, [id, rooms.currentRoom]);
 
   const emitCreateRoom = (roomId, resetForm, redirectHandle) => {
     socket.emit("create-room", { roomId, playerName: userName, playerId: id });
@@ -168,50 +168,43 @@ const GameContextProvider = ({ children }) => {
     socket.emit("join-room", { roomId, playerName: userName, playerId: id });
     setRooms({ ...rooms, currentRoom: roomId });
     if (redirectHandle) { redirectHandle("game/multiplayer"); }
-    // TODO: set choice result by nick name
-
-    socket.on("choice-result", (playersResult) => {
-      setPlayers(
-        [
-          ...players,
-          playersResult,
-        ],
-      );
-    });
-
-    if (resetForm) {
-      resetForm();
-    }
+    if (resetForm) { resetForm(); }
   };
 
-  const getAllRooms = () => {
+  const emitGetAllRooms = () => {
     socket.emit("get-rooms", (res) => {
       res.map((i) => { return { name: i }; });
       setRooms({ ...rooms, availableRooms: res });
     });
-    return rooms;
   };
 
   socket.on("available-rooms", (newRooms) => {
     setRooms({ ...rooms, availableRooms: newRooms });
   });
-  socket.on("created", (users) => { setPlayers(users); });
-  socket.on("created-message", (name) => { setSuccessRoomMessage(name); });
-  socket.on("joined", (users) => {
-    setPlayers(users);
-  });
-  socket.on("leaved", (users) => { setPlayers(users); });
-  socket.on("choice-result", (choice) => { setMultiBattleResult({ user: choice[socket.id].choice }); });
-  socket.on("status-result", (playersStatus) => { setPlayers(playersStatus); });
-  socket.on("status-ready", (readyPlayers) => { setPlayers(readyPlayers); });
-  socket.on("reconnect-room", (roomName, refreshedPlayers) => {
+  socket.on("reconnect-room", (roomName, refreshedUsers, roomStatus) => {
     setRooms({ ...rooms, currentRoom: roomName });
-    setPlayers(refreshedPlayers);
+    filtredPlayers(refreshedUsers);
+    setBattle({ ...battle, roomStatus });
   });
+  socket.on("created", (users, message) => {
+    filtredPlayers(users);
+    setBattle({ ...battle, gameStatus: statuses.startBattle });
+    setSuccessRoomMessage(message);
+  });
+  socket.on("joined", (users) => {
+    filtredPlayers(users);
+    setBattle({ ...battle, gameStatus: statuses.startBattle });
+  });
+  socket.on("leaved", (users) => { filtredPlayers(users); });
+  socket.on("room-status", (roomStatus) => { setBattle({ ...battle, roomStatus }); });
+  socket.on("user-choices", (choice) => { filtredPlayers(choice); });
+  socket.on("user-statuses", (playersStatus) => { filtredPlayers(playersStatus); });
+  socket.on("battle-result", (res) => { setBattle({ ...battle, battleResult: res, roomStatus: statuses.battle }); });
+  socket.on("start-users", ((refreshedUsers) => { filtredPlayers(refreshedUsers); setBattle({ ...battle, battleResult: "" }); }));
 
   const contextValue = useMemo(() => ({
     emitJoinRoom,
-    getAllRooms,
+    getAllRooms: emitGetAllRooms,
     leaveSingleRoom,
     createSingleRoom,
     socket,
@@ -224,9 +217,8 @@ const GameContextProvider = ({ children }) => {
     players,
     emitMultiUserChoice,
     userName,
-    multiBattleResult,
-    leaveRoom,
-    isBattle: battle,
+    leaveRoom: emitLeaveRoom,
+    battle,
     toggleBattle: setBattle,
     emitCreateRoom,
     successRoomMessage,
@@ -235,8 +227,13 @@ const GameContextProvider = ({ children }) => {
     emitChangeStatus,
     isOpenChat,
     toggleChat,
+    statuses,
+    thisUser,
+    emitStartBattle,
+    setScore,
+    gameStatus,
   }), [
-    getAllRooms,
+    emitGetAllRooms,
     result,
     messageOptions,
     successRoomMessage,
@@ -245,15 +242,21 @@ const GameContextProvider = ({ children }) => {
     gameTimer,
     players,
     userName,
-    multiBattleResult,
     battle,
     backToChoice,
     emitMultiUserChoice,
     emitSingleUserChoice,
-    leaveRoom,
+    emitLeaveRoom,
     rooms,
     emitChangeStatus,
     isOpenChat,
+    thisUser,
+    statuses,
+    emitStartBattle,
+    emitCreateRoom,
+    emitJoinRoom,
+    setScore,
+    gameStatus,
   ]);
 
   return (

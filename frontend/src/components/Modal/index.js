@@ -23,8 +23,8 @@ const ModalWrapper = ({
         width={width}
         height={height}
         padding={padding}
-        smWidth={smWidth}
-        smHeight={smHeight}
+        smwidth={smWidth}
+        smheight={smHeight}
       >
         {children}
       </StyledPaper>

@@ -1,7 +1,7 @@
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {
-  IconButton, InputAdornment, Typography,
+  IconButton, InputAdornment,
 } from "@mui/material";
 import { useCallback, useState } from "react";
 
@@ -45,7 +45,7 @@ const MuiTextField = ({
         }}
         error={isError}
         disabled={disabled}
-        helperText={<Typography sx={{ position: "absolute" }} variant="body2">{helperText}</Typography>}
+        helperText={helperText}
       />
     </>
   );

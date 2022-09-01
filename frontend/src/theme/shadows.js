@@ -4,7 +4,11 @@ const shadows = {
   winLayerOne: "0 0 0 20px rgba(121, 153, 238, 0.05)",
   winLayerTwo: "0 0 0 40px rgba(141, 162, 245, 0.04)",
   winLayerThree: "0 0 0 60px rgba(234, 235, 241, 0.02)",
-  1: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+
+  // this box shadow for mui "elevation" prop:
+  0: "",
+  1: "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
+  2: "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
 };
 
 export default shadows;

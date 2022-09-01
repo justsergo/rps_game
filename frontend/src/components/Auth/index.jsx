@@ -43,6 +43,7 @@ const AuthContainer = () => {
   return (
     <Grid
       container
+      item
       xs={11}
       sm={9}
       md={5}
@@ -51,7 +52,7 @@ const AuthContainer = () => {
         height: "100vh", justifyContent: "center", alignItems: "center", margin: "auto",
       }}
     >
-      <StyledPaper elevation={1}>
+      <StyledPaper elevation={2}>
         <Tabs
           value={selectedTab}
           indicatorColor="primary"

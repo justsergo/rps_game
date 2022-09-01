@@ -2,30 +2,38 @@ import {
   Button,
   Grid, Link, Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { RulesImage } from "../../assets/images";
-import ModalWrapper from "../../components/Modal";
 import RoomsModalContainer from "../../components/RoomsModal";
+import ModalWrapper from "../../components/RoomsModal/modalWrapper";
+import { GAME_TYPES } from "../../constants/gameTypes";
+import { GameContext } from "../../services/gameContext";
 import theme from "../../theme";
 import style, {
   StyledGrid, StyledSubtitle, StyledTitle,
 } from "./styles";
 
 const StartPage = () => {
-  const navigate = useNavigate();
   const [modal, setModal] = useState(false);
+  const [openRoomsModal, setOpenRoomsModal] = useState(false);
+  const { emitCreateRoom } = useContext(GameContext);
+  const navigate = useNavigate();
 
-  const toPlay = () => navigate("game");
+  const startSingleGameParams = {
+    redirectHandle: () => navigate("game"),
+    gameType: GAME_TYPES.single,
+  };
+
+  const toSingle = () => emitCreateRoom(startSingleGameParams);
   const toAuth = () => navigate("auth");
 
   const openModal = () => setModal(true);
   const closeModal = () => setModal(false);
 
-  const [openRoomsModal, setOpenRoomsModal] = useState(false);
   const closeRoomsModal = () => setOpenRoomsModal(false);
-  const toRoomsModal = () => setOpenRoomsModal(true);
+  const toMultiplayer = () => setOpenRoomsModal(true);
 
   return (
     <StyledGrid container item xs={10}>
@@ -44,7 +52,7 @@ const StartPage = () => {
             component="button"
             variant="h1"
             color="textPrimary"
-            onClick={toPlay}
+            onClick={toSingle}
             sx={style.menu}
           >
             SINGLE PLAYER
@@ -56,7 +64,7 @@ const StartPage = () => {
             component="button"
             variant="h1"
             color="textPrimary"
-            onClick={toRoomsModal}
+            onClick={toMultiplayer}
             sx={style.menu}
           >
             MULTIPLAYER

@@ -4,7 +4,7 @@ class RoomList {
     }
 
     addRoom (roomId) {
-        this.roomList = { ...this.roomList, [roomId]: {roomStatus: 'start', players:{}}};
+        this.roomList = { ...this.roomList, [roomId]: {roomType:'', roomStatus: 'start', players:{}}};
     }
 
     getRoom (roomId) {
@@ -20,11 +20,30 @@ class RoomList {
     }
 
     changeRoomStatus (roomId, status) {
-        this.roomList[roomId].roomStatus = status;
+        if (this.roomList[roomId]?.roomStatus) {
+            this.roomList[roomId].roomStatus = status;
+        }
     }
 
-    addPlayer (roomId, playerName, playerId) {
-        this.roomList[roomId].players = { ...this.roomList[roomId].players, [playerId] : {playerName, status:'', choice:'', userId: playerId} };
+    changeRoomType (roomId, type) {
+        this.roomList[roomId].roomType = type;
+    }
+
+    addPlayer (roomId, playerName, playerId, userType='user') {
+        this.roomList[roomId].players = { ...this.roomList[roomId].players, [playerId] : {playerName, status:'', choice:'', userId: playerId, userType} };
+    }
+
+    addBot (roomId, userType='bot') {
+        const botID = `bot${Math.random()}`;
+        this.roomList[roomId].players = { 
+            ...this.roomList[roomId].players, [botID] : {
+                playerName:'BOT', status:'user-ready', choice:'', userId: botID, userType
+            } 
+        };
+    }
+
+    getBot (roomId) {
+        return Object.values(this.roomList[roomId].players).filter((user)=>user.userType === 'bot');
     }
 
     getPlayer (roomId, playerId) {
@@ -32,7 +51,10 @@ class RoomList {
     }
 
     getPlayers (roomId) {
-        return Object.values(this.roomList[roomId].players);
+        if (this.roomList[roomId]?.players) {
+            return Object.values(this.roomList[roomId].players);
+        }
+        return []
     }
 
     getPlayersStatus (roomId) {
@@ -44,11 +66,15 @@ class RoomList {
     }
 
     changeUserStatus (roomId, playerId, status) {
-        this.roomList[roomId].players[playerId] = { ...this.roomList[roomId].players[playerId], status };
+        if (this.roomList[roomId]?.players) {
+            this.roomList[roomId].players[playerId] = { ...this.roomList[roomId].players[playerId], status };
+        }
     }
 
     changeUserChoice (roomId, playerId, choice) {
-        this.roomList[roomId].players[playerId] = { ...this.roomList[roomId].players[playerId], choice };
+        if (this.roomList[roomId]?.players) {
+            this.roomList[roomId].players[playerId] = { ...this.roomList[roomId].players[playerId], choice };
+        }
     }
 
     clearUserInfo (roomId) {

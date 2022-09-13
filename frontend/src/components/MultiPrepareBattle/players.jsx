@@ -1,9 +1,8 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useContext } from "react";
 
 import { GameContext } from "../../services/gameContext";
-import ChoiceButton from "../ChoiceButton";
-import { Circle } from "./style";
+import PlayersIcon from "../PlayerIcon";
 
 const Players = () => {
   const { players, gameStatus, thisUser } = useContext(GameContext);
@@ -28,17 +27,14 @@ const Players = () => {
             position: "absolute", top: "-30px", transform: "translateX(-50%)", left: "50%",
           }}
           variant="playerTittle"
-        >
-          {user.playerName}
+        >{user.playerName}
         </Typography>
-        <Box sx={{ height: "fit-content", position: "relative" }}>
-          <ChoiceButton
-            choice={((gameStatus === "battle") && user.choice) || ((thisUser.userId === user.userId) && user.choice)}
-            isPlayer
-            size="iconWrap"
-          />
-          <Circle status={!!user.status} />
-        </Box>
+
+        <PlayersIcon
+          isPlayer
+          status={user.status}
+          choice={((gameStatus === "battle") && user.choice) || ((thisUser.userId === user.userId) && user.choice)}
+        />
       </Grid>
     );
   });

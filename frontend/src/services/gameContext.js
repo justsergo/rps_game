@@ -1,27 +1,29 @@
 import {
   createContext, useCallback, useEffect, useLayoutEffect, useMemo, useState,
 } from "react";
-import { io } from "socket.io-client";
 
-import { getUserId, getUserName } from "../common/utils/localstorageGetItems";
+import SocketList from "../api/socketApi";
+import { getUserId, getUserName } from "../common/localstorageGetItems";
+import { GAME_TYPES } from "../constants/gameTypes";
+import { STATUSES } from "../constants/statuses";
 
 export const GameContext = createContext(null);
 
-const socket = io("/");
+const socketMethod = new SocketList();
 
 const GameContextProvider = ({ children }) => {
   const [isOpenChat, toggleChat] = useState(false);
 
   const [successRoomMessage, setSuccessRoomMessage] = useState(null);
 
-  const [battle, setBattle] = useState({
+  const [battleManager, setBattleManager] = useState({
+    gameType: "",
     roomStatus: "",
     userStatus: "",
     battleResult: "",
-    single: false,
   });
 
-  const gameStatus = useMemo(() => battle.roomStatus, [battle]);
+  const gameStatus = useMemo(() => battleManager.roomStatus, [battleManager]);
 
   const [rooms, setRooms] = useState({
     availableRooms: [],
@@ -30,233 +32,154 @@ const GameContextProvider = ({ children }) => {
 
   const [userName, setUserName] = useState("");
 
-  const [players, setPlayers] = useState([
-    {
-      playerName: "userName", status: "", choice: "", userId: "",
-    },
-  ]);
-
-  const [result, setResultBattle] = useState({
-    conclusion: "",
-    user: "",
-    computer: "",
-  });
-
-  const [messageOptions, setMessageOptions] = useState([]);
+  const [players, setPlayers] = useState([]);
 
   const [score, setScore] = useState(0);
 
-  const [gameTimer, setGameTimer] = useState(3);
+  const [timer, setTimer] = useState(0);
 
   const id = getUserId();
 
-  const thisUser = players.find((user) => user.userId === id) || [id, {
-    playerName: "userName", status: "", choice: "", userId: "",
-  }];
+  const thisUser = useMemo(() => {
+    return players.find((user) => user.userId === id) || {
+      playerName: "userName", status: "", choice: "", userId: "",
+    };
+  }, [id, players]);
 
   const filtredPlayers = (users) => {
     setPlayers(users.sort((a) => { if (a.userId === id) { return -1; } return 0; }));
   };
 
-  const statuses = {
-    startBattle: "start",
-    readyCheck: "ready-check",
-    makeChoice: "make-choice",
-    battle: "battle",
-    battleFall: "battle-fall", // метод  когда батл не состоялся, например по истечению времени готов 1 юзер или никто не сделал выбор
-    userFall: "user-fall", // метод когда юзер в комнате но не участвует в игре, например не нажал готов или не сделал выбор
-  };
-
   useLayoutEffect(() => {
-    socket.emit("reconnect", ({ userId: id }));
-  }, [id]);
+    socketMethod.emitReconnect(id);
+  }, []);
 
   useEffect(() => {
     setUserName(getUserName);
   }, []);
 
-  // single game
-
-  useEffect(() => {
-    if (result.conclusion === result.user && !gameTimer) {
-      setMessageOptions(["You", "Win"]);
-      setScore((s) => s + 1);
-    }
-    if (result.conclusion === result.computer && !gameTimer) {
-      setMessageOptions(["You", "Lose"]);
-      setScore((s) => s - 1);
-    }
-    if (result.conclusion === null && !gameTimer) {
-      setMessageOptions(["Draw", ""]);
-      setScore((s) => s + 0);
-    }
-  }, [result, gameTimer]);
-
-  useEffect(() => {
-    let timer = 0;
-    if (battle.single) {
-      timer = gameTimer > 0 ? setTimeout(() => {
-        setGameTimer(gameTimer - 1);
-      }, 1000) : 0;
-    }
-    if (!battle.single) {
-      setGameTimer(3);
-      clearTimeout(timer);
-    }
-  }, [battle.single, gameTimer]);
-
-  useEffect(() => {
-    socket.on("single-battle-result", (res) => {
-      setResultBattle({
-        conclusion: res.conclusion,
-        computer: res.computer,
-        user: res.user,
-      });
-    });
-    return () => socket.off("single-battle-result");
-  }, []);
-
-  const emitSingleUserChoice = useCallback(
-    ({ playerChoice }) => {
-      socket.emit("single-battle", { playerChoices: playerChoice, roomId: socket.id });
-      setBattle({ ...battle, single: true });
-    },
-    [battle],
-  );
-
-  const createSingleRoom = () => {
-    socket.emit("create-room", { roomId: id, playerName: id, playerId: id });
-    socket.emit("join-room", { roomId: id, playerName: id, playerId: id });
-  };
-
-  const leaveSingleRoom = () => {
-    socket.emit("leave-room", { roomId: id, playerId: id });
-  };
-
-  const backToChoice = useCallback(() => {
-    setBattle({ ...battle, single: false });
-  }, [battle]);
-
-  // multi game
+  const connectToSingleRoom = useCallback(() => {
+    setBattleManager({ ...battleManager, gameType: GAME_TYPES.single });
+    setRooms({ ...rooms, currentRoom: id });
+    socketMethod.emitCreateRoom(id, userName, id, GAME_TYPES.single);
+  }, [userName, id, rooms, battleManager]);
 
   const emitStartBattle = useCallback(() => {
-    socket.emit("start-battle", { roomId: rooms.currentRoom });
-  }, [rooms.currentRoom]);
+    socketMethod.emitStartBattle(rooms);
+  }, [rooms]);
 
-  const emitMultiUserChoice = useCallback(({ playerChoice }) => {
-    socket.emit("change-user-choice", { choice: playerChoice, roomId: rooms.currentRoom, playerId: id });
-  }, [rooms.currentRoom, id]);
+  const emitUserChoice = useCallback((playerChoice) => {
+    socketMethod.emitChangeUserChoice(playerChoice, rooms, id);
+  }, [rooms, id]);
 
   const emitChangeStatus = useCallback(() => {
-    socket.emit("change-user-status", { status: "user-ready", roomId: rooms.currentRoom, playerId: id });
-  }, [rooms.currentRoom, id]);
+    socketMethod.emitChangeUserStatus(rooms, id);
+  }, [rooms, id]);
 
   const emitLeaveRoom = useCallback(() => {
-    socket.emit("leave-room", { roomId: rooms.currentRoom, playerId: id });
-  }, [id, rooms.currentRoom]);
+    socketMethod.emitLeaveRoom(rooms, id);
+  }, [id, rooms]);
 
-  const emitCreateRoom = (roomId, resetForm, redirectHandle) => {
-    socket.emit("create-room", { roomId, playerName: userName, playerId: id });
-    setRooms({ ...rooms, currentRoom: roomId });
-    if (redirectHandle) { redirectHandle("game/multiplayer"); }
+  const emitCreateRoom = useCallback(({
+    roomId, resetForm, redirectHandle, gameType,
+  }) => {
+    const roomIdFromGameType = gameType === GAME_TYPES.single ? id : roomId;
+    setBattleManager({ ...battleManager, gameType });
+    socketMethod.emitCreateRoom(roomIdFromGameType, userName, id, gameType);
+    setRooms({ ...rooms, currentRoom: roomIdFromGameType });
+    if (redirectHandle) { redirectHandle(); }
     if (resetForm) {
       resetForm();
     }
-  };
+  }, [id, userName, rooms, battleManager]);
 
-  const emitJoinRoom = (roomId, resetForm, redirectHandle) => {
-    socket.emit("join-room", { roomId, playerName: userName, playerId: id });
+  const emitJoinRoom = useCallback((roomId, resetForm, redirectHandle) => {
+    socketMethod.emitJoinRoom(roomId, userName, id);
     setRooms({ ...rooms, currentRoom: roomId });
-    if (redirectHandle) { redirectHandle("game/multiplayer"); }
+    if (redirectHandle) { redirectHandle(); }
     if (resetForm) { resetForm(); }
-  };
+  }, [rooms, userName, id]);
 
-  const emitGetAllRooms = () => {
-    socket.emit("get-rooms", (res) => {
+  const emitGetAllRooms = useCallback(() => {
+    socketMethod.emitGetAllRooms((res) => {
       res.map((i) => { return { name: i }; });
       setRooms({ ...rooms, availableRooms: res });
     });
-  };
+  }, [rooms]);
 
-  socket.on("available-rooms", (newRooms) => {
+  socketMethod.emitCheckAvailableRooms((newRooms) => {
     setRooms({ ...rooms, availableRooms: newRooms });
   });
-  socket.on("reconnect-room", (roomName, refreshedUsers, roomStatus) => {
+  socketMethod.listenerReconnect((roomName, refreshedUsers, roomStatus, roomType) => {
     setRooms({ ...rooms, currentRoom: roomName });
     filtredPlayers(refreshedUsers);
-    setBattle({ ...battle, roomStatus });
+    setBattleManager({ ...battleManager, roomStatus, gameType: roomType });
   });
-  socket.on("created", (users, message) => {
+  socketMethod.listenerCreateRoom((users, message) => {
     filtredPlayers(users);
-    setBattle({ ...battle, gameStatus: statuses.startBattle });
+    setBattleManager({ ...battleManager, gameStatus: STATUSES.startBattle });
     setSuccessRoomMessage(message);
   });
-  socket.on("joined", (users) => {
+  socketMethod.listenerJoinRoom((users) => {
     filtredPlayers(users);
-    setBattle({ ...battle, gameStatus: statuses.startBattle });
+    setBattleManager({ ...battleManager, gameStatus: STATUSES.startBattle });
   });
-  socket.on("leaved", (users) => { filtredPlayers(users); });
-  socket.on("room-status", (roomStatus) => { setBattle({ ...battle, roomStatus }); });
-  socket.on("user-choices", (choice) => { filtredPlayers(choice); });
-  socket.on("user-statuses", (playersStatus) => { filtredPlayers(playersStatus); });
-  socket.on("battle-result", (res) => { setBattle({ ...battle, battleResult: res, roomStatus: statuses.battle }); });
-  socket.on("start-users", ((refreshedUsers) => { filtredPlayers(refreshedUsers); setBattle({ ...battle, battleResult: "" }); }));
+  socketMethod.listenerLeaveRoom((users) => { filtredPlayers(users); });
+  socketMethod.listenerStatusRoom((roomStatus) => { setBattleManager({ ...battleManager, roomStatus }); });
+  socketMethod.listenerChoiceUser((choice) => { filtredPlayers(choice); });
+  socketMethod.listenerStatusUser((playersStatus) => { filtredPlayers(playersStatus); });
+  socketMethod.listenerResultBattle((res) => {
+    setBattleManager({ ...battleManager, battleResult: res, roomStatus: STATUSES.battle });
+  });
+  socketMethod.listenerRefreshBattle((refreshedUsers) => {
+    filtredPlayers(refreshedUsers); setBattleManager({ ...battleManager, battleResult: "" });
+  });
+  socketMethod.listenerTimer((leftTime) => setTimer(leftTime));
 
   const contextValue = useMemo(() => ({
     emitJoinRoom,
-    getAllRooms: emitGetAllRooms,
-    leaveSingleRoom,
-    createSingleRoom,
-    socket,
-    emitSingleUserChoice,
-    result,
-    messageOptions,
+    emitGetAllRooms,
+    connectToSingleRoom,
     score,
-    gameTimer,
     rooms,
     players,
-    emitMultiUserChoice,
+    emitUserChoice,
     userName,
-    leaveRoom: emitLeaveRoom,
-    battle,
-    toggleBattle: setBattle,
+    emitLeaveRoom,
+    battleManager,
+    setBattleManager,
     emitCreateRoom,
     successRoomMessage,
     setSuccessRoomMessage,
-    backToChoice,
     emitChangeStatus,
     isOpenChat,
     toggleChat,
-    statuses,
     thisUser,
     emitStartBattle,
     setScore,
     gameStatus,
+    timer,
   }), [
     emitGetAllRooms,
-    result,
-    messageOptions,
     successRoomMessage,
-    setBattle,
+    setBattleManager,
     score,
-    gameTimer,
     players,
     userName,
-    battle,
-    backToChoice,
-    emitMultiUserChoice,
-    emitSingleUserChoice,
+    battleManager,
+    emitUserChoice,
     emitLeaveRoom,
     rooms,
     emitChangeStatus,
     isOpenChat,
     thisUser,
-    statuses,
     emitStartBattle,
     emitCreateRoom,
     emitJoinRoom,
     setScore,
     gameStatus,
+    connectToSingleRoom,
+    timer,
   ]);
 
   return (

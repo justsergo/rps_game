@@ -73,15 +73,13 @@ io.on("connection", socket => {
     roomList.addPlayer(roomId, playerName, playerId);
 
     if (gameType === "single") {
-      // roomList.changeRoomType(roomId, "single")
+      roomList.changeRoomType(roomId, "single")
       roomList.addBot(roomId);
-      // roomList.addPlayer(roomId, playerName, playerId);
     }
 
-    // if (gameType === "multi") {
-    //   roomList.changeRoomType(roomId, "multi")
-    //   roomList.addPlayer(roomId, playerName, playerId);
-    // }   
+    if (gameType === "multi") {
+      roomList.changeRoomType(roomId, "multi")
+    }   
 
     io.to(roomId).emit("created", roomList.getPlayers(roomId), `Room ${roomId} was created`);
     roomList.changeRoomStatus(roomId, STATUSES.startBattle);

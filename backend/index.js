@@ -73,15 +73,8 @@ io.on("connection", socket => {
     roomList.addPlayer(roomId, playerName, playerId);
 
     if (gameType === "single") {
-      // roomList.changeRoomType(roomId, "single")
       roomList.addBot(roomId);
-      // roomList.addPlayer(roomId, playerName, playerId);
     }
-
-    // if (gameType === "multi") {
-    //   roomList.changeRoomType(roomId, "multi")
-    //   roomList.addPlayer(roomId, playerName, playerId);
-    // }   
 
     io.to(roomId).emit("created", roomList.getPlayers(roomId), `Room ${roomId} was created`);
     roomList.changeRoomStatus(roomId, STATUSES.startBattle);
@@ -142,7 +135,6 @@ io.on("connection", socket => {
     if(readyPlayers.length == playersInRoom.length) {   
       clearInterval(timerId)
       timerId = timer({ count: 5 , callback:(leftTime) => io.to(roomId).emit("timer", leftTime) });
-
       roomList.changeRoomStatus(roomId, STATUSES.makeChoice);
       io.to(roomId).emit("room-status", STATUSES.makeChoice); 
       return;

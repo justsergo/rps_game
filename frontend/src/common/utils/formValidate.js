@@ -41,8 +41,8 @@ export const createRoomValidate = (values) => {
   const errors = {};
   if (!values.createRoomName) {
     errors.createRoomName = "Field is required";
-  } else if (values.createRoomName.length > 15) {
-    errors.createRoomName = "Cannot be more than 15 characters";
+  } else if (values.createRoomName.length > 10) {
+    errors.createRoomName = "Cannot be more than 10 characters";
   }
   return errors;
 };

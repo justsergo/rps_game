@@ -18,8 +18,6 @@ const Game = () => {
     emitChangeStatus();
   };
 
-  console.log(battleManager.roomStatus);
-
   const ToggleScreens = () => {
     switch (battleManager.roomStatus) {
       case STATUSES.startBattle:

@@ -12,7 +12,7 @@ const timer = ({count, clear, callback}) => {
         }
 
       }, 1000);
-      return intervalId
+      return {intervalId, leftTime}
 };
 
 module.exports = { timer };
